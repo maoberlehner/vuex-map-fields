@@ -1,0 +1,52 @@
+{
+  "name": "vuex-map-fields",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "Vuex",
+    "two-way data binding"
+  ],
+  "author": "Markus Oberlehner",
+  "homepage": "https://github.com/maoberlehner/vuex-map-fields",
+  "license": "MIT",
+  "scripts": {
+    "scripts:bundle": "rollup --config --output.format umd --name vuex-map-fields --output.file dist/index.js src/index.js",
+    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js",
+    "scripts": "npm run scripts:bundle && npm run scripts:minify",
+    "build": "npm run scripts",
+    "watch": "onchange src/**/*.js -- npm run scripts",
+    "lint": "eslint --ignore-path .gitignore .",
+    "coverage": "jest --coverage --maxWorkers=4",
+    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@avalanche/eslint-config": "^1.0.2",
+    "babel-preset-env": "^1.6.1",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.14.0",
+    "eslint-plugin-compat": "^2.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^22.0.4",
+    "onchange": "^3.3.0",
+    "rollup": "^0.53.0",
+    "rollup-plugin-babel": "^3.0.3",
+    "uglify-js": "^3.3.2"
+  },
+  "main": "dist/index.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maoberlehner/vuex-map-fields"
+  },
+  "bugs": {
+    "url": "https://github.com/maoberlehner/vuex-map-fields/issues"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "jest": {
+    "mapCoverage": true
+  }
+}
