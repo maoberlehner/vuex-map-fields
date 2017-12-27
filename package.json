@@ -14,7 +14,6 @@
     "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js",
     "scripts": "npm run scripts:bundle && npm run scripts:minify",
     "build": "npm run scripts",
-    "watch": "onchange src/**/*.js -- npm run scripts",
     "lint": "eslint --ignore-path .gitignore .",
     "coverage": "jest --coverage --maxWorkers=4",
     "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls",
@@ -29,7 +28,6 @@
     "eslint-plugin-compat": "^2.1.0",
     "eslint-plugin-import": "^2.8.0",
     "jest": "^22.0.4",
-    "onchange": "^3.3.0",
     "rollup": "^0.53.0",
     "rollup-plugin-babel": "^3.0.3",
     "uglify-js": "^3.3.2"
