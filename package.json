@@ -1,9 +1,10 @@
 {
   "name": "vuex-map-fields",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Enable two-way data binding for form fields saved in a Vuex store",
   "keywords": [
-    "Vuex",
+    "vue",
+    "vuex",
     "two-way data binding"
   ],
   "author": "Markus Oberlehner",
@@ -20,6 +21,9 @@
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
+  "dependencies": {
+    "unchanged": "^1.0.4"
+  },
   "devDependencies": {
     "@avalanche/eslint-config": "^1.0.2",
     "babel-preset-env": "^1.6.1",
@@ -30,6 +34,7 @@
     "jest": "^22.0.4",
     "rollup": "^0.53.0",
     "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "uglify-js": "^3.3.2"
   },
   "main": "dist/index.js",

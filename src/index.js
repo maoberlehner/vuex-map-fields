@@ -1,29 +1,9 @@
-export function mapFields(fields) {
-  // TODO eigene funktion
-  const normalizedFields = Array.isArray(fields) ? fields.reduce((prev, path) => {
-    const key = path.split(`.`).slice(-1)[0];
+import { get, set } from 'unchanged';
 
-    // TODO throw error if key already set, with info that dings oder anderer key verwendet werden sollte
+import arrayToObject from './lib/array-to-object';
+import makeMapFields from './lib/map-fields';
+import makeUpdateField from './lib/update-field';
 
-    // eslint-disable-next-line no-param-reassign
-    prev[key] = path;
+export const updateField = makeUpdateField({ set });
 
-    return prev;
-  }, {}) : fields;
-
-  return Object.keys(normalizedFields).reduce((prev, key) => {
-    const path = normalizedFields[key];
-
-    // eslint-disable-next-line no-param-reassign
-    prev[key] = {
-      get() {
-        return get(path, store.state);
-      },
-      set(value) {
-        store.commit(`updateForm`, { path, value }); // TODO mutation name
-      },
-    };
-
-    return prev;
-  }, {});
-}
+export const mapFields = makeMapFields({ arrayToObject, get });
