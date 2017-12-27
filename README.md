@@ -11,15 +11,15 @@ npm install --save vuex-map-fields
 ```
 
 ### Basic example
-The following example component shows the most basic usage, for mapping fields to the Vuex store using two-way data binding with `v-model`, without directly modifying the store itself, but using getter and setter functions internally (as described here: [Vuex: Two-way Computed Property](https://vuex.vuejs.org/en/forms.html#two-way-computed-property)).
+The following example component shows the most basic usage, for mapping fields to the Vuex store using two-way data binding with `v-model`, without directly modifying the store itself, but using getter and setter functions internally (as it is described in the official Vuex documentation: [Two-way Computed Property](https://vuex.vuejs.org/en/forms.html#two-way-computed-property)).
 
 #### Store
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-// Import the `updateField` mutation from
-// the `vuex-map-fields` module.
+// Import the `updateField` mutation function
+// from the `vuex-map-fields` module.
 import { updateField } from 'vuex-map-fields';
 
 Vue.use(Vuex);
@@ -125,7 +125,7 @@ export default {
 ```
 
 ### Rename properties
-Sometimes you might give your computed properties different names than what you're using in the Vuex store. This is also possible by passing an object of fields to the `mapFields` function instead of an array.
+Sometimes you might want to give your computed properties different names than what you're using in the Vuex store. This is also possible by passing an object of fields to the `mapFields` function instead of an array.
 
 ```html
 <template>
