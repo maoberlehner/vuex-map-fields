@@ -56,8 +56,8 @@ export default {
     // computed properties with getter and setter
     // functions for accessing the Vuex store.
     ...mapFields([
-      `fieldA`,
-      `fieldB`,
+      'fieldA',
+      'fieldB',
     ]),
   },
 };
@@ -113,11 +113,11 @@ export default {
     // after the last dot (e.g. `firstName`) is used
     // for defining the name of the computed property.
     ...mapFields([
-      `user.firstName`,
-      `user.lastName`,
+      'user.firstName',
+      'user.lastName',
       // It is also possible to access
       // nested properties in arrays.
-      `addresses[0].town`,
+      'addresses[0].town',
     ]),
   },
 };
@@ -141,8 +141,8 @@ import { mapFields } from 'vuex-map-fields';
 export default {
   computed: {
     ...mapFields({
-      userFirstName: `user.firstName`,
-      userLastName: `user.lastName`,
+      userFirstName: 'user.firstName',
+      userLastName: 'user.lastName',
     }),
   },
 };

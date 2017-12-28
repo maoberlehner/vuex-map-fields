@@ -2,6 +2,7 @@
 .editorconfig
 .eslintrc
 .travis.yml
+*.spec.js
 
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
