@@ -65,7 +65,7 @@ export default {
 ```
 
 ### Nested properties
-Oftentimes you want to nest the properties in the Vuex store. `vuex-map-fields` supports nested data structures by utilizing the object dot string notation.
+Oftentimes you want to have nested properties in the Vuex store. `vuex-map-fields` supports nested data structures by utilizing the object dot string notation.
 
 #### Store
 ```js
@@ -115,7 +115,7 @@ export default {
     ...mapFields([
       'user.firstName',
       'user.lastName',
-      // It is also possible to access
+      // It's also possible to access
       // nested properties in arrays.
       'addresses[0].town',
     ]),
@@ -125,7 +125,7 @@ export default {
 ```
 
 ### Rename properties
-Sometimes you might want to give your computed properties different names than what you're using in the Vuex store. This is also possible by passing an object of fields to the `mapFields` function instead of an array.
+Sometimes you might want to give your computed properties different names than what you're using in the Vuex store. Renaming properties is made possible by passing an object of fields to the `mapFields` function instead of an array.
 
 ```html
 <template>
