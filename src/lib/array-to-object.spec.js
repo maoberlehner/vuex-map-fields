@@ -24,8 +24,8 @@ describe(`arrayToObject()`, () => {
   test(`It should throw an error if a key is already set.`, () => {
     const fields = [
       `foo`,
-      `foo.bar`,
-      `foo[0].bar`,
+      `bar.bar`,
+      `baz[0].bar`,
     ];
 
     expect(() => arrayToObject(fields)).toThrow();
@@ -34,13 +34,13 @@ describe(`arrayToObject()`, () => {
   test(`It should work with multiple values.`, () => {
     const fields = [
       `foo`,
-      `foo.bar`,
-      `foo[0].bar.baz`,
+      `bar.bar`,
+      `baz[0].foo.baz`,
     ];
     const expectedResult = {
       foo: `foo`,
-      bar: `foo.bar`,
-      baz: `foo[0].bar.baz`,
+      bar: `bar.bar`,
+      baz: `baz[0].foo.baz`,
     };
 
     expect(arrayToObject(fields)).toEqual(expectedResult);
