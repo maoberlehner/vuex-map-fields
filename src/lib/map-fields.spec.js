@@ -2,13 +2,13 @@ import makeMapFields from './map-fields';
 
 describe(`arrayToObject()`, () => {
   test(`It should be a function.`, () => {
-    const mapFields = makeMapFields({ arrayToObject: jest.fn(), get: jest.fn() });
+    const mapFields = makeMapFields({ arrayToObject: jest.fn() });
 
     expect(typeof mapFields).toBe(`function`);
   });
 
   test(`It should map getter and setter functions to an object of fields.`, () => {
-    const mapFields = makeMapFields({ arrayToObject: jest.fn(), get: jest.fn() });
+    const mapFields = makeMapFields({ arrayToObject: jest.fn() });
     const objectOfFields = {
       foo: `foo`,
       bar: `bar`,
@@ -32,7 +32,7 @@ describe(`arrayToObject()`, () => {
       foo: `foo`,
       bar: `bar`,
     });
-    const mapFields = makeMapFields({ arrayToObject: mockArrayToObject, get: jest.fn() });
+    const mapFields = makeMapFields({ arrayToObject: mockArrayToObject });
     const arrayOfFields = [
       `foo`,
       `bar`,
@@ -51,23 +51,20 @@ describe(`arrayToObject()`, () => {
     expect(mapFields(arrayOfFields)).toEqual(expectedResult);
   });
 
-  test(`It should call the injected \`get\` function when calling a field getter.`, () => {
-    const getMock = jest.fn();
-    const mapFields = makeMapFields({ arrayToObject: jest.fn(), get: getMock });
-    const objectOfFields = {
-      foo: `foo`,
-      bar: `bar.baz`,
-    };
+  test(`It should call the getter function defined by the \`getterType\` when calling a field getter.`, () => {
+    const mockGetter = jest.fn();
+    const mapFields = makeMapFields({ arrayToObject: jest.fn() });
+    const objectOfFields = { foo: `foo` };
     const mappedFields = mapFields(objectOfFields);
 
-    mappedFields.bar.get.apply({ $store: { state: `mockState` } });
+    mappedFields.foo.get.apply({ $store: { getters: { getField: mockGetter } } });
 
-    expect(getMock).toBeCalledWith(`bar.baz`, `mockState`);
+    expect(mockGetter).toBeCalledWith(`foo`);
   });
 
   test(`It should commit the \`updateField\` mutation when calling a field setter.`, () => {
     const commitMock = jest.fn();
-    const mapFields = makeMapFields({ arrayToObject: jest.fn(), get: jest.fn() });
+    const mapFields = makeMapFields({ arrayToObject: jest.fn() });
     const objectOfFields = {
       foo: `foo`,
       bar: `bar.baz`,

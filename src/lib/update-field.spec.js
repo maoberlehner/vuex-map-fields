@@ -2,7 +2,7 @@ import { set } from 'unchanged';
 
 import makeUpdateField from './update-field';
 
-describe(`makeUpdateField()`, () => {
+describe(`updateField()`, () => {
   test(`It should be a function.`, () => {
     const updateField = makeUpdateField({ set: jest.fn() });
 
