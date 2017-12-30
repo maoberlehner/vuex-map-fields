@@ -6,6 +6,7 @@
 *.rej
 *.swo
 *.swp
+*.tgz
 *.vi
 *.zip
 *~
@@ -28,3 +29,4 @@ Thumbs.db
 coverage
 dist
 node_modules
+test/package

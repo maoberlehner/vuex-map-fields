@@ -1,4 +1,8 @@
-export default function makeMapFields({ arrayToObject, get }) {
+export default function makeMapFields({
+  arrayToObject,
+  getterType = `getField`,
+  mutationType = `updateField`,
+}) {
   return function mapFields(fields) {
     const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
 
@@ -6,10 +10,10 @@ export default function makeMapFields({ arrayToObject, get }) {
       const path = fieldsObject[key];
       const field = {
         get() {
-          return get(path, this.$store.state);
+          return this.$store.getters[getterType](path);
         },
         set(value) {
-          this.$store.commit(`updateField`, { path, value });
+          this.$store.commit(mutationType, { path, value });
         },
       };
 

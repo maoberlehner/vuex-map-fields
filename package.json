@@ -15,11 +15,14 @@
     "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js",
     "scripts": "npm run scripts:bundle && npm run scripts:minify",
     "build": "npm run scripts",
-    "lint": "eslint --ignore-path .gitignore .",
-    "coverage": "jest --coverage --maxWorkers=4",
-    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls",
-    "test": "jest",
-    "prepublishOnly": "npm run build"
+    "fake-publish": "npm run build && sh test/utils/fake-publish.sh",
+    "lint": "npm run fake-publish && eslint --ignore-path .gitignore .",
+    "coveralls": "npm run test:coverage && cat coverage/lcov.info | coveralls",
+    "test:unit": "jest src",
+    "test:integration": "npm run fake-publish && jest test",
+    "test:coverage": "npm run fake-publish && jest --coverage --maxWorkers=4",
+    "test": "npm run test:unit && npm run test:integration",
+    "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
     "unchanged": "^1.0.4"
@@ -35,7 +38,11 @@
     "rollup": "^0.53.1",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "uglify-js": "^3.3.3"
+    "uglify-js": "^3.3.3",
+    "vue": "^2.5.13",
+    "vue-template-compiler": "^2.5.13",
+    "vue-test-utils": "^1.0.0-beta.9",
+    "vuex": "^3.0.1"
   },
   "main": "dist/index.js",
   "module": "src/index.js",
@@ -50,6 +57,10 @@
     "last 2 versions"
   ],
   "jest": {
-    "mapCoverage": true
+    "mapCoverage": true,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/package/"
+    ]
   }
 }

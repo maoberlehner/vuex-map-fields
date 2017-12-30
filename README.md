@@ -18,9 +18,9 @@ The following example component shows the most basic usage, for mapping fields t
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-// Import the `updateField` mutation function
-// from the `vuex-map-fields` module.
-import { updateField } from 'vuex-map-fields';
+// Import the `getField` getter and the `updateField`
+// mutation function from the `vuex-map-fields` module.
+import { getField, updateField } from 'vuex-map-fields';
 
 Vue.use(Vuex);
 
@@ -28,6 +28,11 @@ export default new Vuex.Store({
   state: {
     fieldA: '',
     fieldB: '',
+  },
+  getters: {
+    // Add the `getField` getter to the
+    // `getters` of your Vuex store instance.
+    getField,
   },
   mutations: {
     // Add the `updateField` mutation to the
@@ -72,7 +77,7 @@ Oftentimes you want to have nested properties in the Vuex store. `vuex-map-field
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import { updateField } from 'vuex-map-fields';
+import { getField, updateField } from 'vuex-map-fields';
 
 Vue.use(Vuex);
 
@@ -87,6 +92,9 @@ export default new Vuex.Store({
         town: '',
       },
     ],
+  },
+  getters: {
+    getField,
   },
   mutations: {
     updateField,
@@ -147,6 +155,105 @@ export default {
   },
 };
 </script>
+```
+
+### Custom getters and mutations
+By default `vuex-map-fields` is searching for the given properties starting from the root of your state object. Depending on the size of your application, the state object might become quite big and therefore updating the state starting from the root might become a performance issue. To circumvent such problems, it is possible to create a custom `mapFields()` function which is configured to access custom mutation and getter functions which don't start from the root of the state object but are accessing a specific point of the state.
+
+#### Store
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+import { getField, updateField } from 'vuex-map-fields';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    user: {
+      firstName: '',
+      lastName: '',
+    },
+  },
+  getters: {
+    // By wrapping the `getField()` function we're
+    // able to provide a specific property of the state.
+    getUserField(state) {
+      return getField(state.user);
+    },
+  },
+  mutations: {
+    // Mutating only a specific property of the state
+    // can be significantly faster than mutating the
+    // whole state every time a field is updated.
+    updateUserField(state, field) {
+      updateField(state.user, field);
+    },
+  },
+});
+```
+
+#### Component
+```html
+<template>
+  <div id="app">
+    <input v-model="firstName">
+    <input v-model="lastName">
+  </div>
+</template>
+
+<script>
+import { createHelpers } from 'vuex-map-fields';
+
+// The getter and mutation types we're providing
+// here, must be the same as the function names we've
+// used in the store.
+const { mapFields } = createHelpers({
+  getterType: `getUserField`,
+  mutationType: `updateUserField`,
+});
+
+export default {
+  computed: {
+    // Because we're providing the `state.user` property
+    // to the getter and mutation functions, we must not
+    // use the `user.` prefix when mapping the fields.
+    ...mapFields([
+      'firstName',
+      'lastName',
+    ]),
+  },
+};
+</script>
+```
+
+## Upgrade from 0.x.x to 1.x.x
+Instead of accessing the state directly, since the 1.0.0 release, in order to enable the ability to implement custom getters and mutations, `vuex-map-fields` is using a getter function to access the state. This makes it necessary to add a getter function to your Vuex store.
+
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+// You now have to also import the `getField()` function.
+import { getField, updateField } from 'vuex-map-fields';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    fieldA: '',
+    fieldB: '',
+  },
+  getters: {
+    // Add the `getField` getter to the
+    // `getters` of your Vuex store instance.
+    getField,
+  },
+  mutations: {
+    updateField,
+  },
+});
 ```
 
 ## About
