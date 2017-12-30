@@ -3,9 +3,11 @@
 .eslintrc
 .travis.yml
 *.spec.js
+*.tgz
 
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 rollup.config.js
 
 coverage
+test
