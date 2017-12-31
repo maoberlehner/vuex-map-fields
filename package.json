@@ -24,9 +24,6 @@
     "test": "npm run test:unit && npm run test:integration",
     "prepublishOnly": "npm test && npm run build"
   },
-  "dependencies": {
-    "unchanged": "^1.0.4"
-  },
   "devDependencies": {
     "@avalanche/eslint-config": "^1.0.2",
     "babel-preset-env": "^1.6.1",
