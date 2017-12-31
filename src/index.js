@@ -1,9 +1,43 @@
-import { get, set } from 'unchanged';
-
 import arrayToObject from './lib/array-to-object';
-import makeMapFields from './lib/map-fields';
-import makeUpdateField from './lib/update-field';
 
-export const updateField = makeUpdateField({ set });
+export function getField(state) {
+  return path => path.split(/[.[\]]+/).reduce((prev, key) => prev[key], state);
+}
 
-export const mapFields = makeMapFields({ arrayToObject, get });
+export function updateField(state, { path, value }) {
+  path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
+    if (array.length === index + 1) {
+      // eslint-disable-next-line no-param-reassign
+      prev[key] = value;
+    }
+
+    return prev[key];
+  }, state);
+}
+
+export function mapFields(fields, getterType = `getField`, mutationType = `updateField`) {
+  const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
+
+  return Object.keys(fieldsObject).reduce((prev, key) => {
+    const path = fieldsObject[key];
+    const field = {
+      get() {
+        return this.$store.getters[getterType](path);
+      },
+      set(value) {
+        this.$store.commit(mutationType, { path, value });
+      },
+    };
+
+    // eslint-disable-next-line no-param-reassign
+    prev[key] = field;
+
+    return prev;
+  }, {});
+}
+
+export const createHelpers = ({ getterType, mutationType }) => ({
+  [getterType]: getField,
+  [mutationType]: updateField,
+  mapFields: fields => mapFields(fields, getterType, mutationType),
+});
