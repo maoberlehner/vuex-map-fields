@@ -6,6 +6,9 @@ export default function arrayToObject(fields = []) {
       throw new Error(`The key \`${key}\` is already in use.`);
     }
 
-    return Object.assign(prev, { [key]: path });
+    // eslint-disable-next-line no-param-reassign
+    prev[key] = path;
+
+    return prev;
   }, {});
 }
