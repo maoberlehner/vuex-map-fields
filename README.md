@@ -228,6 +228,128 @@ export default {
 </script>
 ```
 
+### Vuex modules
+Vuex makes it possible to divide the store into modules.
+
+#### Store
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+import { createHelpers } from 'vuex-map-fields';
+
+// Because by default, getters and mutations in Vuex
+// modules, are globally accessible and not namespaced,
+// you most likely want to rename the getter and mutation
+// helpers because otherwise you can't reuse them in multiple,
+// non namespaced modules.
+const { getFooField, updateFooField } = createHelpers({
+  getterType: `getFooField`,
+  mutationType: `updateFooField`,
+});
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  // ...
+  modules: {
+    fooModule: {
+      state: {
+        foo: ``,
+      },
+      getters: {
+        getFooField,
+      },
+      mutations: {
+        updateFooField,
+      },
+    },
+  },
+});
+```
+
+#### Component
+```html
+<template>
+  <div id="app">
+    <input v-model="foo">
+  </div>
+</template>
+
+<script>
+import { createHelpers } from 'vuex-map-fields';
+
+// We're using the same getter and mutation types
+// as we've used in the store above.
+const { mapFields } = createHelpers({
+  getterType: `getFooField`,
+  mutationType: `updateFooField`,
+});
+
+export default {
+  computed: {
+    ...mapFields(['foo']),
+  },
+};
+</script>
+```
+
+### Namespaced Vuex modules
+By default, mutations and getters inside modules are registered under the global namespace – but you can mark modules as `namespaced` which prevents naming clashes of mutations and getters between modules.
+
+#### Store
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+import { getField, updateFiled } from 'vuex-map-fields';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  // ...
+  modules: {
+    fooModule: {
+      namespaced: true,
+      state: {
+        foo: ``,
+      },
+      getters: {
+        getField,
+      },
+      mutations: {
+        updateField,
+      },
+    },
+  },
+});
+```
+
+#### Component
+```html
+<template>
+  <div id="app">
+    <input v-model="foo">
+  </div>
+</template>
+
+<script>
+import { createHelpers } from 'vuex-map-fields';
+
+// `fooModule` is the name of the Vuex module.
+const { mapFields } = createHelpers({
+  getterType: `fooModule/getField`,
+  mutationType: `fooModule/updateField`,
+});
+
+export default {
+  computed: {
+    ...mapFields(['foo']),
+  },
+};
+</script>
+```
+
 ## Upgrade from 0.x.x to 1.x.x
 Instead of accessing the state directly, since the 1.0.0 release, in order to enable the ability to implement custom getters and mutations, `vuex-map-fields` is using a getter function to access the state. This makes it necessary to add a getter function to your Vuex store.
 
