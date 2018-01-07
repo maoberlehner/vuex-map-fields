@@ -71,7 +71,6 @@ localVue.use(Vuex);
       store.state.foo = `foo`;
       store.state.bar.bar = `bar`;
       store.state.baz[0].foo.baz = `baz`;
-
       wrapper.update();
 
       expect(wrapper.find(`#foo`).element.value).toBe(`foo`);

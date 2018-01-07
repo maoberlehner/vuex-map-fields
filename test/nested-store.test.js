@@ -52,7 +52,6 @@ describe(`Component initialized with customized getter and mutation functions.`,
 
   test(`It should update field values when the store is updated.`, () => {
     store.state.form.foo.foo = `foo`;
-
     wrapper.update();
 
     expect(wrapper.element.value).toBe(`foo`);
