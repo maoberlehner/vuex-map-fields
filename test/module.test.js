@@ -1,18 +1,13 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallow } from 'vue-test-utils';
 
-import { createHelpers, getField, updateField } from './package/src';
+import { getField, mapFields, updateField } from './package/src';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-const { mapFields } = createHelpers({
-  getterType: `getFormField`,
-  mutationType: `updateFormField`,
-});
-
-describe(`Component initialized with customized getter and mutation functions.`, () => {
+describe(`Component initialized with Vuex module.`, () => {
   let Component;
   let store;
   let wrapper;
@@ -22,23 +17,23 @@ describe(`Component initialized with customized getter and mutation functions.`,
       template: `<input id="foo" v-model="foo">`,
       computed: {
         ...mapFields([
-          `foo.foo`,
+          `foo`,
         ]),
       },
     };
 
     store = new Vuex.Store({
-      state: {
-        form: { foo: { foo: `` } },
-      },
-      getters: {
-        getFormField(state) {
-          return getField(state.form);
-        },
-      },
-      mutations: {
-        updateFormField(state, payload) {
-          updateField(state.form, payload);
+      modules: {
+        fooModule: {
+          state: {
+            foo: ``,
+          },
+          getters: {
+            getField,
+          },
+          mutations: {
+            updateField,
+          },
         },
       },
     });
@@ -51,7 +46,7 @@ describe(`Component initialized with customized getter and mutation functions.`,
   });
 
   test(`It should update field values when the store is updated.`, () => {
-    store.state.form.foo.foo = `foo`;
+    store.state.fooModule.foo = `foo`;
     wrapper.update();
 
     expect(wrapper.element.value).toBe(`foo`);
@@ -61,6 +56,6 @@ describe(`Component initialized with customized getter and mutation functions.`,
     wrapper.element.value = `foo`;
     wrapper.trigger(`input`);
 
-    expect(store.state.form.foo.foo).toBe(`foo`);
+    expect(store.state.fooModule.foo).toBe(`foo`);
   });
 });
