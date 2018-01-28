@@ -38,12 +38,12 @@ describe(`index`, () => {
       };
       const expectedResult = {
         foo: {
-          get: expect.anything(),
-          set: expect.anything(),
+          get: expect.any(Function),
+          set: expect.any(Function),
         },
         bar: {
-          get: expect.anything(),
-          set: expect.anything(),
+          get: expect.any(Function),
+          set: expect.any(Function),
         },
       };
 
@@ -57,12 +57,12 @@ describe(`index`, () => {
       ];
       const expectedResult = {
         foo: {
-          get: expect.anything(),
-          set: expect.anything(),
+          get: expect.any(Function),
+          set: expect.any(Function),
         },
         bar: {
-          get: expect.anything(),
-          set: expect.anything(),
+          get: expect.any(Function),
+          set: expect.any(Function),
         },
       };
 
@@ -110,8 +110,8 @@ describe(`index`, () => {
       const helpers = createHelpers({ getterType: `getFoo`, mutationType: `updateFoo` });
       const expectedResult = {
         foo: {
-          get: expect.anything(),
-          set: expect.anything(),
+          get: expect.any(Function),
+          set: expect.any(Function),
         },
       };
 
