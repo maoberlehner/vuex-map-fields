@@ -1,4 +1,10 @@
-import { createHelpers, getField, mapFields, updateField } from './';
+import {
+  createHelpers,
+  getField,
+  mapFields,
+  mapMultiRowFields,
+  updateField,
+} from './';
 
 describe(`index`, () => {
   describe(`getField()`, () => {
@@ -93,6 +99,71 @@ describe(`index`, () => {
     });
   });
 
+  describe(`mapMultiRowFields()`, () => {
+    test(`It should be possible to re-map the initial path.`, () => {
+      const expectedResult = {
+        otherFieldRows: { get: expect.any(Function) },
+      };
+
+      expect(mapMultiRowFields({ otherFieldRows: `fieldRows` })).toEqual(expectedResult);
+    });
+
+    test(`It should get the value of a property via the \`getField()\` function.`, () => {
+      const mockFieldRows = [
+        {
+          foo: `Foo`,
+          bar: `Bar`,
+        },
+        {
+          foo: `Foo`,
+          bar: `Bar`,
+        },
+      ];
+      const mockGetField = jest.fn().mockReturnValue(mockFieldRows);
+      const mappedFieldRows = mapMultiRowFields([`fieldRows`]);
+
+      const getterSetters = mappedFieldRows.fieldRows.get.apply({
+        $store: { getters: { getField: mockGetField } },
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const x = getterSetters[0].bar; // Trigger getter function.
+      expect(mockGetField).lastCalledWith(`fieldRows[0].bar`);
+
+      // eslint-disable-next-line no-unused-vars
+      const y = getterSetters[1].foo; // Trigger getter function.
+      expect(mockGetField).lastCalledWith(`fieldRows[1].foo`);
+    });
+
+    test(`It should commit new values to the store.`, () => {
+      const mockFieldRows = [
+        {
+          foo: `Foo`,
+          bar: `Bar`,
+        },
+        {
+          foo: `Foo`,
+          bar: `Bar`,
+        },
+      ];
+      const mockCommit = jest.fn();
+      const mappedFieldRows = mapMultiRowFields([`fieldRows`]);
+
+      const getterSetters = mappedFieldRows.fieldRows.get.apply({
+        $store: {
+          getters: { getField: () => mockFieldRows },
+          commit: mockCommit,
+        },
+      });
+
+      getterSetters[0].bar = `New Bar`; // Trigger setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[0].bar`, value: `New Bar` });
+
+      getterSetters[1].foo = `New Foo`; // Trigger setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[1].foo`, value: `New Foo` });
+    });
+  });
+
   describe(`createHelpers()`, () => {
     test(`It should be a function.`, () => {
       expect(typeof createHelpers).toBe(`function`);
@@ -104,6 +175,7 @@ describe(`index`, () => {
       expect(typeof helpers.getFoo).toBe(`function`);
       expect(typeof helpers.updateFoo).toBe(`function`);
       expect(typeof helpers.mapFields).toBe(`function`);
+      expect(typeof helpers.mapMultiRowFields).toBe(`function`);
     });
 
     test(`It should call the \`mapFields()\` function with the provided getter and mutation types.`, () => {
@@ -116,6 +188,17 @@ describe(`index`, () => {
       };
 
       expect(helpers.mapFields([`foo`])).toEqual(expectedResult);
+    });
+
+    test(`It should call the \`mapMultiRowFields()\` function with the provided getter and mutation types.`, () => {
+      const helpers = createHelpers({ getterType: `getFoo`, mutationType: `updateFoo` });
+      const expectedResult = {
+        foo: {
+          get: expect.any(Function),
+        },
+      };
+
+      expect(helpers.mapMultiRowFields([`foo`])).toEqual(expectedResult);
     });
   });
 });

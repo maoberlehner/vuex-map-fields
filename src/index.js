@@ -36,8 +36,41 @@ export function mapFields(fields, getterType = `getField`, mutationType = `updat
   }, {});
 }
 
+export function mapMultiRowFields(paths, getterType = `getField`, mutationType = `updateField`) {
+  const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
+
+  return Object.keys(pathsObject).reduce((entries, key) => {
+    const path = pathsObject[key];
+
+    // eslint-disable-next-line no-param-reassign
+    entries[key] = {
+      get() {
+        const store = this.$store;
+        const rows = store.getters[getterType](path);
+
+        return rows.map((fieldsObject, index) =>
+          Object.keys(fieldsObject).reduce((prev, fieldKey) => {
+            const fieldPath = `${path}[${index}].${fieldKey}`;
+
+            return Object.defineProperty(prev, fieldKey, {
+              get() {
+                return store.getters[getterType](fieldPath);
+              },
+              set(value) {
+                store.commit(mutationType, { path: fieldPath, value });
+              },
+            });
+          }, {}));
+      },
+    };
+
+    return entries;
+  }, {});
+}
+
 export const createHelpers = ({ getterType, mutationType }) => ({
   [getterType]: getField,
   [mutationType]: updateField,
   mapFields: fields => mapFields(fields, getterType, mutationType),
+  mapMultiRowFields: paths => mapMultiRowFields(paths, getterType, mutationType),
 });
