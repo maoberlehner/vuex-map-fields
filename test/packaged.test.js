@@ -1,6 +1,6 @@
 /* eslint-disable import/no-duplicates */
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from 'vue-test-utils';
+import { createLocalVue, shallow } from '@vue/test-utils';
 
 import componentFactory from './utils/component';
 import storeFactory from './utils/store';

@@ -210,8 +210,8 @@ import { createHelpers } from 'vuex-map-fields';
 // here, must be the same as the function names we've
 // used in the store.
 const { mapFields } = createHelpers({
-  getterType: `getUserField`,
-  mutationType: `updateUserField`,
+  getterType: 'getUserField',
+  mutationType: 'updateUserField',
 });
 
 export default {
@@ -244,8 +244,8 @@ import { createHelpers } from 'vuex-map-fields';
 // helpers because otherwise you can't reuse them in multiple,
 // non namespaced modules.
 const { getFooField, updateFooField } = createHelpers({
-  getterType: `getFooField`,
-  mutationType: `updateFooField`,
+  getterType: 'getFooField',
+  mutationType: 'updateFooField',
 });
 
 Vue.use(Vuex);
@@ -255,7 +255,7 @@ export default new Vuex.Store({
   modules: {
     fooModule: {
       state: {
-        foo: ``,
+        foo: '',
       },
       getters: {
         getFooField,
@@ -282,8 +282,8 @@ import { createHelpers } from 'vuex-map-fields';
 // We're using the same getter and mutation types
 // as we've used in the store above.
 const { mapFields } = createHelpers({
-  getterType: `getFooField`,
-  mutationType: `updateFooField`,
+  getterType: 'getFooField',
+  mutationType: 'updateFooField',
 });
 
 export default {
@@ -312,7 +312,7 @@ export default new Vuex.Store({
     fooModule: {
       namespaced: true,
       state: {
-        foo: ``,
+        foo: '',
       },
       getters: {
         getField,
@@ -338,8 +338,8 @@ import { createHelpers } from 'vuex-map-fields';
 
 // `fooModule` is the name of the Vuex module.
 const { mapFields } = createHelpers({
-  getterType: `fooModule/getField`,
-  mutationType: `fooModule/updateField`,
+  getterType: 'fooModule/getField',
+  mutationType: 'fooModule/updateField',
 });
 
 export default {
@@ -367,12 +367,12 @@ export default new Vuex.Store({
   state: {
     addresses: [
       {
-        zip: `12345`,
-        town: `Foo Town`,
+        zip: '12345',
+        town: 'Foo Town',
       },
       {
-        zip: `54321`,
-        town: `Bar Town`,
+        zip: '54321',
+        town: 'Bar Town',
       },
     ],
   },
