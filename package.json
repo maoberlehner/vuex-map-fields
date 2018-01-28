@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@avalanche/eslint-config": "^1.0.2",
+    "@vue/test-utils": "^1.0.0-beta.11",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
     "eslint": "^4.16.0",
@@ -38,7 +39,6 @@
     "uglify-js": "^3.3.9",
     "vue": "^2.5.13",
     "vue-template-compiler": "^2.5.13",
-    "vue-test-utils": "^1.0.0-beta.11",
     "vuex": "^3.0.1"
   },
   "main": "dist/index.js",

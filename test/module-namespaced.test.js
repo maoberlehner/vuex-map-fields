@@ -1,5 +1,5 @@
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from 'vue-test-utils';
+import { createLocalVue, shallow } from '@vue/test-utils';
 
 import { createHelpers, getField, updateField } from './package/src';
 
