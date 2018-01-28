@@ -350,6 +350,63 @@ export default {
 </script>
 ```
 
+### Multi-row fields
+If you want to build a form which allows the user to enter multiple rows of a specific data type with multiple fields (e.g. multiple addresses) you can use the multi-row field mapping function.
+
+#### Store
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+import { getField, updateField } from 'vuex-map-fields';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  // ...
+  state: {
+    addresses: [
+      {
+        zip: `12345`,
+        town: `Foo Town`,
+      },
+      {
+        zip: `54321`,
+        town: `Bar Town`,
+      },
+    ],
+  },
+  getters: {
+    getField,
+  },
+  mutations: {
+    updateField,
+  },
+});
+```
+
+#### Component
+```html
+<template>
+  <div id="app">
+    <div v-for="address in addresses">
+      <label>ZIP <input v-model="address.zip"></label>
+      <label>Town <input v-model="address.town"></label>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapMultiRowFields } from 'vuex-map-fields';
+
+export default {
+  computed: {
+    ...mapMultiRowFields(['addresses']),
+  },
+};
+</script>
+```
+
 ## Upgrade from 0.x.x to 1.x.x
 Instead of accessing the state directly, since the 1.0.0 release, in order to enable the ability to implement custom getters and mutations, `vuex-map-fields` is using a getter function to access the state. This makes it necessary to add a getter function to your Vuex store.
 
