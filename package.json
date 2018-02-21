@@ -1,6 +1,6 @@
 {
   "name": "vuex-map-fields",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Enable two-way data binding for form fields saved in a Vuex store",
   "keywords": [
     "vue",
@@ -11,9 +11,10 @@
   "homepage": "https://github.com/maoberlehner/vuex-map-fields",
   "license": "MIT",
   "scripts": {
-    "scripts:bundle": "rollup --config --output.format umd --name vuex-map-fields --output.file dist/index.js src/index.js",
-    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js",
-    "scripts": "npm run scripts:bundle && npm run scripts:minify",
+    "scripts:umd": "rollup --config --output.format umd --name vuex-map-fields --output.file dist/index.js src/index.js",
+    "scripts:es": "rollup --config --output.format es --name vuex-map-fields --output.file dist/index.esm.js src/index.js",
+    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js && uglifyjs --compress --mangle --comments --output dist/index.esm.min.js dist/index.esm.js",
+    "scripts": "npm run scripts:umd && npm run scripts:es && npm run scripts:minify",
     "build": "npm run scripts",
     "fake-publish": "npm run build && sh test/utils/fake-publish.sh",
     "lint": "npm run fake-publish && eslint --ignore-path .gitignore .",
@@ -26,23 +27,23 @@
   },
   "devDependencies": {
     "@avalanche/eslint-config": "^1.0.2",
-    "@vue/test-utils": "^1.0.0-beta.11",
+    "@vue/test-utils": "^1.0.0-beta.12",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
-    "eslint": "^4.16.0",
+    "eslint": "^4.18.1",
     "eslint-plugin-compat": "^2.2.0",
     "eslint-plugin-import": "^2.8.0",
-    "jest": "^22.1.4",
-    "rollup": "^0.55.1",
+    "jest": "^22.4.0",
+    "rollup": "^0.56.2",
     "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-node-resolve": "^3.0.2",
-    "uglify-js": "^3.3.9",
+    "rollup-plugin-node-resolve": "^3.0.3",
+    "uglify-es": "^3.3.9",
     "vue": "^2.5.13",
     "vue-template-compiler": "^2.5.13",
     "vuex": "^3.0.1"
   },
   "main": "dist/index.js",
-  "module": "src/index.js",
+  "module": "dist/index.esm.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/maoberlehner/vuex-map-fields"
@@ -54,7 +55,6 @@
     "last 2 versions"
   ],
   "jest": {
-    "mapCoverage": true,
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/package/"
