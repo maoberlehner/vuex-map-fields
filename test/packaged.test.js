@@ -9,7 +9,7 @@ import {
   getField as getFieldSrc,
   mapFields as mapFieldsSrc,
   updateField as updateFieldSrc,
-} from './package/src';
+} from './package/dist/index.esm';
 
 import {
   getField as getFieldDist,

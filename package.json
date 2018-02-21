@@ -11,9 +11,10 @@
   "homepage": "https://github.com/maoberlehner/vuex-map-fields",
   "license": "MIT",
   "scripts": {
-    "scripts:bundle": "rollup --config --output.format umd --name vuex-map-fields --output.file dist/index.js src/index.js",
-    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js",
-    "scripts": "npm run scripts:bundle && npm run scripts:minify",
+    "scripts:umd": "rollup --config --output.format umd --name vuex-map-fields --output.file dist/index.js src/index.js",
+    "scripts:es": "rollup --config --output.format es --name vuex-map-fields --output.file dist/index.esm.js src/index.js",
+    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js && uglifyjs --compress --mangle --comments --output dist/index.esm.min.js dist/index.esm.js",
+    "scripts": "npm run scripts:umd && npm run scripts:es && npm run scripts:minify",
     "build": "npm run scripts",
     "fake-publish": "npm run build && sh test/utils/fake-publish.sh",
     "lint": "npm run fake-publish && eslint --ignore-path .gitignore .",
@@ -36,13 +37,13 @@
     "rollup": "^0.56.2",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-node-resolve": "^3.0.3",
-    "uglify-js": "^3.3.11",
+    "uglify-es": "^3.3.9",
     "vue": "^2.5.13",
     "vue-template-compiler": "^2.5.13",
     "vuex": "^3.0.1"
   },
   "main": "dist/index.js",
-  "module": "src/index.js",
+  "module": "dist/index.esm.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/maoberlehner/vuex-map-fields"
