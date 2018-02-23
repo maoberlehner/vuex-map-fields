@@ -39,7 +39,6 @@
     "jest": "^22.4.0",
     "rollup": "^0.56.2",
     "rollup-plugin-babel": "^4.0.0-beta.0",
-    "rollup-plugin-node-resolve": "^3.0.3",
     "uglify-es": "^3.3.9",
     "vue": "^2.5.13",
     "vue-template-compiler": "^2.5.13",
