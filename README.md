@@ -302,7 +302,7 @@ By default, mutations and getters inside modules are registered under the global
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import { getField, updateFiled } from 'vuex-map-fields';
+import { getField, updateField } from 'vuex-map-fields';
 
 Vue.use(Vuex);
 

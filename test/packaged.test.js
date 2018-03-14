@@ -51,7 +51,12 @@ localVue.use(Vuex);
     mapFields: mapFieldsRoot,
     updateField: updateFieldRoot,
   },
-].forEach(({ dir, getField, mapFields, updateField }) => {
+].forEach(({
+  dir,
+  getField,
+  mapFields,
+  updateField,
+}) => {
   const Component = componentFactory({ mapFields });
 
   describe(`Component initialized with functions from \`${dir}\`.`, () => {
