@@ -1,4 +1,5 @@
 # vuex-map-fields
+
 [![Patreon](https://img.shields.io/badge/patreon-donate-blue.svg)](https://www.patreon.com/maoberlehner)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/maoberlehner)
 [![Build Status](https://travis-ci.org/maoberlehner/vuex-map-fields.svg?branch=master)](https://travis-ci.org/maoberlehner/vuex-map-fields)
@@ -8,14 +9,17 @@
 Enable two-way data binding for form fields saved in a Vuex store.
 
 ## Install
+
 ```bash
 npm install --save vuex-map-fields
 ```
 
 ### Basic example
+
 The following example component shows the most basic usage, for mapping fields to the Vuex store using two-way data binding with `v-model`, without directly modifying the store itself, but using getter and setter functions internally (as it is described in the official Vuex documentation: [Two-way Computed Property](https://vuex.vuejs.org/en/forms.html#two-way-computed-property)).
 
 #### Store
+
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -45,6 +49,7 @@ export default new Vuex.Store({
 ```
 
 #### Component
+
 ```html
 <template>
   <div id="app">
@@ -72,9 +77,11 @@ export default {
 ```
 
 ### Nested properties
+
 Oftentimes you want to have nested properties in the Vuex store. `vuex-map-fields` supports nested data structures by utilizing the object dot string notation.
 
 #### Store
+
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -105,6 +112,7 @@ export default new Vuex.Store({
 ```
 
 #### Component
+
 ```html
 <template>
   <div id="app">
@@ -135,6 +143,7 @@ export default {
 ```
 
 ### Rename properties
+
 Sometimes you might want to give your computed properties different names than what you're using in the Vuex store. Renaming properties is made possible by passing an object of fields to the `mapFields` function instead of an array.
 
 ```html
@@ -160,9 +169,11 @@ export default {
 ```
 
 ### Custom getters and mutations
+
 By default `vuex-map-fields` is searching for the given properties starting from the root of your state object. Depending on the size of your application, the state object might become quite big and therefore updating the state starting from the root might become a performance issue. To circumvent such problems, it is possible to create a custom `mapFields()` function which is configured to access custom mutation and getter functions which don't start from the root of the state object but are accessing a specific point of the state.
 
 #### Store
+
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -197,6 +208,7 @@ export default new Vuex.Store({
 ```
 
 #### Component
+
 ```html
 <template>
   <div id="app">
@@ -231,9 +243,11 @@ export default {
 ```
 
 ### Vuex modules
+
 Vuex makes it possible to divide the store into modules.
 
 #### Store
+
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -271,6 +285,7 @@ export default new Vuex.Store({
 ```
 
 #### Component
+
 ```html
 <template>
   <div id="app">
@@ -297,9 +312,11 @@ export default {
 ```
 
 ### Namespaced Vuex modules
+
 By default, mutations and getters inside modules are registered under the global namespace – but you can mark modules as `namespaced` which prevents naming clashes of mutations and getters between modules.
 
 #### Store
+
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -328,6 +345,7 @@ export default new Vuex.Store({
 ```
 
 #### Component
+
 ```html
 <template>
   <div id="app">
@@ -353,9 +371,11 @@ export default {
 ```
 
 ### Multi-row fields
+
 If you want to build a form which allows the user to enter multiple rows of a specific data type with multiple fields (e.g. multiple addresses) you can use the multi-row field mapping function.
 
 #### Store
+
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -388,6 +408,7 @@ export default new Vuex.Store({
 ```
 
 #### Component
+
 ```html
 <template>
   <div id="app">
@@ -410,6 +431,7 @@ export default {
 ```
 
 ## Upgrade from 0.x.x to 1.x.x
+
 Instead of accessing the state directly, since the 1.0.0 release, in order to enable the ability to implement custom getters and mutations, `vuex-map-fields` is using a getter function to access the state. This makes it necessary to add a getter function to your Vuex store.
 
 ```js
@@ -438,7 +460,9 @@ export default new Vuex.Store({
 ```
 
 ## About
+
 ### Author
+
 Markus Oberlehner  
 Website: https://markus.oberlehner.net  
 Twitter: https://twitter.com/MaOberlehner  
@@ -446,4 +470,5 @@ PayPal.me: https://paypal.me/maoberlehner
 Patreon: https://www.patreon.com/maoberlehner
 
 ### License
+
 MIT

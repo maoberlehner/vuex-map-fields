@@ -1,6 +1,7 @@
 # Contributing
 
 ## Reporting Issues
+
 Found a problem? Want a new feature?
 
 - See if your issue or idea has [already been reported].
@@ -9,6 +10,7 @@ Found a problem? Want a new feature?
 Remember, a bug is a *demonstrable problem* caused by *our* code.
 
 ## Submitting Pull Requests
+
 Pull requests are the greatest contributions, so be sure they are focused in scope, and do avoid unrelated commits.
 
 1. To begin, [fork this project], clone your fork, and add our upstream.
