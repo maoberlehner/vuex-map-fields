@@ -53,7 +53,6 @@ describe(`Component initialized with namespaced Vuex module.`, () => {
 
   test(`It should update field values when the store is updated.`, () => {
     store.state.fooModule.foo = `foo`;
-    wrapper.update();
 
     expect(wrapper.element.value).toBe(`foo`);
   });

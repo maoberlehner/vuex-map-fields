@@ -459,6 +459,12 @@ export default new Vuex.Store({
 });
 ```
 
+## Articles
+
+- [Form Fields, Two-Way Data Binding and Vuex](https://markus.oberlehner.net/blog/form-fields-two-way-data-binding-and-vuex/)
+- [How to Handle Multi-row Forms with Vue, Vuex and vuex-map-fields](https://markus.oberlehner.net/blog/how-to-handle-multi-row-forms-with-vue-vuex-and-vuex-map-fields/)
+- [How to Structure a Complex Vuex Store](https://markus.oberlehner.net/blog/how-to-structure-a-complex-vuex-store/)
+
 ## About
 
 ### Author
