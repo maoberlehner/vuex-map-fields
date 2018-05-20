@@ -1,5 +1,5 @@
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import { createHelpers, getField, updateField } from './package/src';
 
@@ -44,7 +44,7 @@ describe(`Component initialized with namespaced Vuex module.`, () => {
       },
     });
 
-    wrapper = shallow(Component, { localVue, store });
+    wrapper = shallowMount(Component, { localVue, store });
   });
 
   test(`It should render the component.`, () => {
