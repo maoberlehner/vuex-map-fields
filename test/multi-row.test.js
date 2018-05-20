@@ -1,5 +1,5 @@
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import { mapMultiRowFields, getField, updateField } from '../src';
 
@@ -48,7 +48,7 @@ describe(`Component initialized with multi row setup.`, () => {
       },
     });
 
-    wrapper = shallow(Component, { localVue, store });
+    wrapper = shallowMount(Component, { localVue, store });
   });
 
   test(`It should render the component.`, () => {
