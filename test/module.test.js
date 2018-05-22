@@ -1,5 +1,5 @@
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import { getField, mapFields, updateField } from './package/src';
 
@@ -38,7 +38,7 @@ describe(`Component initialized with Vuex module.`, () => {
       },
     });
 
-    wrapper = shallow(Component, { localVue, store });
+    wrapper = shallowMount(Component, { localVue, store });
   });
 
   test(`It should render the component.`, () => {
@@ -47,7 +47,6 @@ describe(`Component initialized with Vuex module.`, () => {
 
   test(`It should update field values when the store is updated.`, () => {
     store.state.fooModule.foo = `foo`;
-    wrapper.update();
 
     expect(wrapper.element.value).toBe(`foo`);
   });

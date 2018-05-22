@@ -1,5 +1,5 @@
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import { createHelpers, getField, updateField } from './package/src';
 
@@ -43,7 +43,7 @@ describe(`Component initialized with customized getter and mutation functions.`,
       },
     });
 
-    wrapper = shallow(Component, { localVue, store });
+    wrapper = shallowMount(Component, { localVue, store });
   });
 
   test(`It should render the component.`, () => {
@@ -52,7 +52,6 @@ describe(`Component initialized with customized getter and mutation functions.`,
 
   test(`It should update field values when the store is updated.`, () => {
     store.state.form.foo.foo = `foo`;
-    wrapper.update();
 
     expect(wrapper.element.value).toBe(`foo`);
   });

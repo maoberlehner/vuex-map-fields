@@ -1,5 +1,5 @@
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import { mapMultiRowFields, getField, updateField } from '../src';
 
@@ -48,7 +48,7 @@ describe(`Component initialized with multi row setup.`, () => {
       },
     });
 
-    wrapper = shallow(Component, { localVue, store });
+    wrapper = shallowMount(Component, { localVue, store });
   });
 
   test(`It should render the component.`, () => {
@@ -58,7 +58,6 @@ describe(`Component initialized with multi row setup.`, () => {
   test(`It should update field values when the store is updated.`, () => {
     store.state.users[0].name = `New Name`;
     store.state.users[1].email = `new@email.com`;
-    wrapper.update();
 
     expect(wrapper.find(`input`).element.value).toBe(`New Name`);
     expect(wrapper.find(`div:nth-child(2) input:nth-child(2)`).element.value).toBe(`new@email.com`);

@@ -1,16 +1,11 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 
-import { createHelpers, getField, updateField } from './package/src';
+import { mapFields, getField, updateField } from './package/src';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
-
-const { mapFields } = createHelpers({
-  getterType: `fooModule/getField`,
-  mutationType: `fooModule/updateField`,
-});
 
 describe(`Component initialized with namespaced Vuex module.`, () => {
   let Component;
@@ -21,7 +16,7 @@ describe(`Component initialized with namespaced Vuex module.`, () => {
     Component = {
       template: `<input id="foo" v-model="foo">`,
       computed: {
-        ...mapFields([
+        ...mapFields(`fooModule`, [
           `foo`,
         ]),
       },

@@ -370,6 +370,27 @@ export default {
 </script>
 ```
 
+Or you can pass the module namespace string as the first argument of the `mapFields()` function.
+
+```html
+<template>
+  <div id="app">
+    <input v-model="foo">
+  </div>
+</template>
+
+<script>
+import { mapFields } from 'vuex-map-fields';
+
+export default {
+  computed: {
+    // `fooModule` is the name of the Vuex module.
+    ...mapFields(`fooModule`, ['foo']),
+  },
+};
+</script>
+```
+
 ### Multi-row fields
 
 If you want to build a form which allows the user to enter multiple rows of a specific data type with multiple fields (e.g. multiple addresses) you can use the multi-row field mapping function.
@@ -458,6 +479,12 @@ export default new Vuex.Store({
   },
 });
 ```
+
+## Articles
+
+- [Form Fields, Two-Way Data Binding and Vuex](https://markus.oberlehner.net/blog/form-fields-two-way-data-binding-and-vuex/)
+- [How to Handle Multi-row Forms with Vue, Vuex and vuex-map-fields](https://markus.oberlehner.net/blog/how-to-handle-multi-row-forms-with-vue-vuex-and-vuex-map-fields/)
+- [How to Structure a Complex Vuex Store](https://markus.oberlehner.net/blog/how-to-structure-a-complex-vuex-store/)
 
 ## About
 

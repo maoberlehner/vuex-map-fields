@@ -1,6 +1,6 @@
 /* eslint-disable import/no-duplicates */
 import Vuex from 'vuex';
-import { createLocalVue, shallow } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import componentFactory from './utils/component';
 import storeFactory from './utils/store';
@@ -65,7 +65,7 @@ localVue.use(Vuex);
 
     beforeEach(() => {
       store = storeFactory({ getField, updateField });
-      wrapper = shallow(Component, { localVue, store });
+      wrapper = shallowMount(Component, { localVue, store });
     });
 
     test(`It should render the component.`, () => {
@@ -76,7 +76,6 @@ localVue.use(Vuex);
       store.state.foo = `foo`;
       store.state.bar.bar = `bar`;
       store.state.baz[0].foo.baz = `baz`;
-      wrapper.update();
 
       expect(wrapper.find(`#foo`).element.value).toBe(`foo`);
       expect(wrapper.find(`#bar`).element.value).toBe(`bar`);
