@@ -1,5 +1,25 @@
 import arrayToObject from './lib/array-to-object';
 
+function normalizeNamespace(fn) {
+  return (namespace, map, getterType, mutationType) => {
+    /* eslint-disable no-param-reassign */
+    if (typeof namespace !== `string`) {
+      mutationType = getterType;
+      getterType = map;
+      map = namespace;
+      namespace = ``;
+    } else if (namespace.charAt(namespace.length - 1) !== `/`) {
+      namespace += `/`;
+    }
+
+    getterType = `${namespace}${getterType || `getField`}`;
+    mutationType = `${namespace}${mutationType || `updateField`}`;
+    /* eslint-enable */
+
+    return fn(namespace, map, getterType, mutationType);
+  };
+}
+
 export function getField(state) {
   return path => path.split(/[.[\]]+/).reduce((prev, key) => prev[key], state);
 }
@@ -15,7 +35,7 @@ export function updateField(state, { path, value }) {
   }, state);
 }
 
-export function mapFields(fields, getterType = `getField`, mutationType = `updateField`) {
+export const mapFields = normalizeNamespace((namespace, fields, getterType, mutationType) => {
   const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
 
   return Object.keys(fieldsObject).reduce((prev, key) => {
@@ -34,9 +54,15 @@ export function mapFields(fields, getterType = `getField`, mutationType = `updat
 
     return prev;
   }, {});
-}
+});
 
-export function mapMultiRowFields(paths, getterType = `getField`, mutationType = `updateField`) {
+export const mapMultiRowFields = normalizeNamespace((
+  namespace,
+  paths,
+  getterType,
+  mutationType,
+) => {
+// export function mapMultiRowFields(paths, getterType = `getField`, mutationType = `updateField`) {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
 
   return Object.keys(pathsObject).reduce((entries, key) => {
@@ -66,7 +92,7 @@ export function mapMultiRowFields(paths, getterType = `getField`, mutationType =
 
     return entries;
   }, {});
-}
+});
 
 export const createHelpers = ({ getterType, mutationType }) => ({
   [getterType]: getField,
