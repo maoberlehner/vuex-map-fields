@@ -97,6 +97,41 @@ describe(`index`, () => {
 
       expect(commitMock).toBeCalledWith(`updateField`, { path: `bar.baz`, value: `newFieldValue` });
     });
+
+    describe(`Namespacing`, () => {
+      test(`It should call the namespaced getter function.`, () => {
+        const mockGetter = jest.fn();
+        const objectOfFields = { foo: `foo` };
+        const mappedFields = mapFields(`fooModule/`, objectOfFields);
+
+        mappedFields.foo.get.apply({ $store: { getters: { 'fooModule/getField': mockGetter } } });
+
+        expect(mockGetter).toBeCalledWith(`foo`);
+      });
+
+      test(`It should call the namespaced getter function even if no trailing slash is provided.`, () => {
+        const mockGetter = jest.fn();
+        const objectOfFields = { foo: `foo` };
+        const mappedFields = mapFields(`fooModule`, objectOfFields);
+
+        mappedFields.foo.get.apply({ $store: { getters: { 'fooModule/getField': mockGetter } } });
+
+        expect(mockGetter).toBeCalledWith(`foo`);
+      });
+
+      test(`It should commit the namespaced mutation function.`, () => {
+        const commitMock = jest.fn();
+        const objectOfFields = {
+          foo: `foo`,
+          bar: `bar.baz`,
+        };
+        const mappedFields = mapFields(`fooModule`, objectOfFields);
+
+        mappedFields.bar.set.apply({ $store: { commit: commitMock } }, [`newFieldValue`]);
+
+        expect(commitMock).toBeCalledWith(`fooModule/updateField`, { path: `bar.baz`, value: `newFieldValue` });
+      });
+    });
   });
 
   describe(`mapMultiRowFields()`, () => {
