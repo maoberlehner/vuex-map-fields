@@ -22,7 +22,7 @@ Pull requests are the greatest contributions, so be sure they are focused in sco
    # Assign the original repo to a remote called "upstream"
    git remote add upstream https://github.com/maoberlehner/vuex-map-fields
    # Install the tools necessary for development
-   npm install
+   yarn install
    ```
 2. Create a branch for your feature or hotfix:
    ```bash
