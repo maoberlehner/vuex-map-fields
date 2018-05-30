@@ -62,7 +62,6 @@ export const mapMultiRowFields = normalizeNamespace((
   getterType,
   mutationType,
 ) => {
-// export function mapMultiRowFields(paths, getterType = `getField`, mutationType = `updateField`) {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
 
   return Object.keys(pathsObject).reduce((entries, key) => {
