@@ -1,20 +1,17 @@
 import arrayToObject from './lib/array-to-object';
 
 function normalizeNamespace(fn) {
-  return (namespace, map, getterType, mutationType) => {
-    /* eslint-disable no-param-reassign */
-    if (typeof namespace !== `string`) {
-      mutationType = getterType;
-      getterType = map;
-      map = namespace;
-      namespace = ``;
-    } else if (namespace.charAt(namespace.length - 1) !== `/`) {
+  return (...params) => {
+    // eslint-disable-next-line prefer-const
+    let [namespace, map, getterType, mutationType] =
+      typeof params[0] === `string` ? [...params] : [``, ...params];
+
+    if (namespace.length && namespace.charAt(namespace.length - 1) !== `/`) {
       namespace += `/`;
     }
 
     getterType = `${namespace}${getterType || `getField`}`;
     mutationType = `${namespace}${mutationType || `updateField`}`;
-    /* eslint-enable */
 
     return fn(namespace, map, getterType, mutationType);
   };
@@ -62,7 +59,6 @@ export const mapMultiRowFields = normalizeNamespace((
   getterType,
   mutationType,
 ) => {
-// export function mapMultiRowFields(paths, getterType = `getField`, mutationType = `updateField`) {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
 
   return Object.keys(pathsObject).reduce((entries, key) => {
@@ -97,6 +93,8 @@ export const mapMultiRowFields = normalizeNamespace((
 export const createHelpers = ({ getterType, mutationType }) => ({
   [getterType]: getField,
   [mutationType]: updateField,
-  mapFields: fields => mapFields(fields, getterType, mutationType),
-  mapMultiRowFields: paths => mapMultiRowFields(paths, getterType, mutationType),
+  mapFields: normalizeNamespace((namespace, fields) =>
+    mapFields(namespace, fields, getterType, mutationType)),
+  mapMultiRowFields: normalizeNamespace((namespace, paths) =>
+    mapMultiRowFields(namespace, paths, getterType, mutationType)),
 });
