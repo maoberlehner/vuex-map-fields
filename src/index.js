@@ -93,6 +93,8 @@ export const mapMultiRowFields = normalizeNamespace((
 export const createHelpers = ({ getterType, mutationType }) => ({
   [getterType]: getField,
   [mutationType]: updateField,
-  mapFields: fields => mapFields(fields, getterType, mutationType),
-  mapMultiRowFields: paths => mapMultiRowFields(paths, getterType, mutationType),
+  mapFields: normalizeNamespace((namespace, fields) =>
+    mapFields(namespace, fields, getterType, mutationType)),
+  mapMultiRowFields: normalizeNamespace((namespace, paths) =>
+    mapMultiRowFields(namespace, paths, getterType, mutationType)),
 });
