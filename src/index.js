@@ -1,20 +1,17 @@
 import arrayToObject from './lib/array-to-object';
 
 function normalizeNamespace(fn) {
-  return (namespace, map, getterType, mutationType) => {
-    /* eslint-disable no-param-reassign */
-    if (typeof namespace !== `string`) {
-      mutationType = getterType;
-      getterType = map;
-      map = namespace;
-      namespace = ``;
-    } else if (namespace.charAt(namespace.length - 1) !== `/`) {
+  return (...params) => {
+    // eslint-disable-next-line prefer-const
+    let [namespace, map, getterType, mutationType] =
+      typeof params[0] === `string` ? [...params] : [``, ...params];
+
+    if (namespace.length && namespace.charAt(namespace.length - 1) !== `/`) {
       namespace += `/`;
     }
 
     getterType = `${namespace}${getterType || `getField`}`;
     mutationType = `${namespace}${mutationType || `updateField`}`;
-    /* eslint-enable */
 
     return fn(namespace, map, getterType, mutationType);
   };
