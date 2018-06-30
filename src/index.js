@@ -32,6 +32,43 @@ export function updateField(state, { path, value }) {
   }, state);
 }
 
+export function pushArray(state, { path, value }) {
+  path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
+    if (array.length === index + 1) {
+      // eslint-disable-next-line no-param-reassign
+      prev[key].push(value);
+    }
+
+    return prev[key];
+  }, state);
+}
+
+export function setArray(state, { path, value, arrayIndex }) {
+  if (arrayIndex !== undefined) {
+    path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
+      if (array.length === index + 1) {
+        // eslint-disable-next-line no-param-reassign
+        prev[key].splice(arrayIndex, 1, value);
+      }
+
+      return prev[key];
+    }, state);
+  }
+}
+
+export function removeArray(state, { path, arrayIndex }) {
+  if (arrayIndex !== undefined) {
+    path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
+      if (array.length === index + 1) {
+        // eslint-disable-next-line no-param-reassign
+        prev[key].splice(arrayIndex, 1);
+      }
+
+      return prev[key];
+    }, state);
+  }
+}
+
 export const mapFields = normalizeNamespace((namespace, fields, getterType, mutationType) => {
   const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
 
@@ -85,7 +122,6 @@ export const mapMultiRowFields = normalizeNamespace((
           }, {}));
       },
     };
-
     return entries;
   }, {});
 });
