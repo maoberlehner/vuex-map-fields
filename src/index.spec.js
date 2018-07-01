@@ -4,6 +4,9 @@ import {
   mapFields,
   mapMultiRowFields,
   updateField,
+  pushArray,
+  setArray,
+  removeArray,
 } from './';
 
 describe(`index`, () => {
@@ -27,6 +30,69 @@ describe(`index`, () => {
       const expectedResult = { foo: { bar: `new value` } };
 
       updateField(mockState, { path: `foo.bar`, value: `new value` });
+
+      expect(mockState).toEqual(expectedResult);
+    });
+  });
+
+  describe(`pushArray()`, () => {
+    test(`It should be a function.`, () => {
+      expect(typeof pushArray).toBe(`function`);
+    });
+
+    test(`It should be pushed array of the key at the given path in the state with the given value.`, () => {
+      const mockState = { foo: { bar: [`initial value`] } };
+      const expectedResult = { foo: { bar: [`initial value`, `new value`] } };
+
+      pushArray(mockState, { path: `foo.bar`, value: `new value` });
+
+      expect(mockState).toEqual(expectedResult);
+    });
+  });
+
+  describe(`setArray()`, () => {
+    test(`It should be a function.`, () => {
+      expect(typeof setArray).toBe(`function`);
+    });
+
+    test(`It should override array of the key at the given path in the state with the given value.`, () => {
+      const mockState = { foo: { bar: [`initial value`] } };
+      const expectedResult = { foo: { bar: [`new value`] } };
+
+      setArray(mockState, { path: `foo.bar`, value: `new value`, arrayIndex: 0 });
+
+      expect(mockState).toEqual(expectedResult);
+    });
+
+    test(`It should do nothing because of missing arrayIndex.`, () => {
+      const mockState = { foo: { bar: [`initial value`] } };
+      const expectedResult = { foo: { bar: [`initial value`] } };
+
+      setArray(mockState, { path: `foo.bar`, value: `new value` });
+
+      expect(mockState).toEqual(expectedResult);
+    });
+  });
+
+  describe(`removeArray()`, () => {
+    test(`It should be a function.`, () => {
+      expect(typeof removeArray).toBe(`function`);
+    });
+
+    test(`It should be removed array of the key at the given path in the state with the given value.`, () => {
+      const mockState = { foo: { bar: [`initial value`] } };
+      const expectedResult = { foo: { bar: [] } };
+
+      removeArray(mockState, { path: `foo.bar`, arrayIndex: 0 });
+
+      expect(mockState).toEqual(expectedResult);
+    });
+
+    test(`It should do nothing because of missing arrayIndex.`, () => {
+      const mockState = { foo: { bar: [`initial value`] } };
+      const expectedResult = { foo: { bar: [`initial value`] } };
+
+      removeArray(mockState, { path: `foo.bar` });
 
       expect(mockState).toEqual(expectedResult);
     });
