@@ -122,6 +122,7 @@ export const mapMultiRowFields = normalizeNamespace((
           }, {}));
       },
     };
+
     return entries;
   }, {});
 });

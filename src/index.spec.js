@@ -6,7 +6,7 @@ import {
   updateField,
   pushArray,
   setArray,
-  removeArray
+  removeArray,
 } from './';
 
 describe(`index`, () => {
@@ -92,7 +92,7 @@ describe(`index`, () => {
       const mockState = { foo: { bar: [`initial value`] } };
       const expectedResult = { foo: { bar: [`initial value`] } };
 
-      setArray(mockState, { path: `foo.bar` });
+      removeArray(mockState, { path: `foo.bar` });
 
       expect(mockState).toEqual(expectedResult);
     });
