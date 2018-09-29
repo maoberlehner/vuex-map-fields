@@ -67,6 +67,11 @@ describe(`Component initialized with multi row setup.`, () => {
     wrapper.find(`input`).element.value = `New Name`;
     wrapper.find(`input`).trigger(`input`);
 
+    // The following line was added because otherwise the tests are failing.
+    // This is a pretty dirty workaround for some problem with @vue/test-utils.
+    // eslint-disable-next-line no-unused-expressions
+    wrapper.find(`div:nth-child(2)`);
+
     wrapper.find(`div:nth-child(2) input:nth-child(2)`).element.value = `new@email.com`;
     wrapper.find(`div:nth-child(2) input:nth-child(2)`).trigger(`input`);
 
