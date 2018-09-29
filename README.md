@@ -76,6 +76,8 @@ export default {
 </script>
 ```
 
+[![Edit basic example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/94l98vx0p4)
+
 ### Nested properties
 
 Oftentimes you want to have nested properties in the Vuex store. `vuex-map-fields` supports nested data structures by utilizing the object dot string notation.
@@ -142,6 +144,8 @@ export default {
 </script>
 ```
 
+[![Edit nested properties example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/38y88yvoo1)
+
 ### Rename properties
 
 Sometimes you might want to give your computed properties different names than what you're using in the Vuex store. Renaming properties is made possible by passing an object of fields to the `mapFields` function instead of an array.
@@ -167,6 +171,8 @@ export default {
 };
 </script>
 ```
+
+[![Edit rename properties example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/7yowrm6j4x)
 
 ### Custom getters and mutations
 
@@ -242,6 +248,8 @@ export default {
 </script>
 ```
 
+[![Edit custom getters and mutations example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/4rroy51z8x)
+
 ### Vuex modules
 
 Vuex makes it possible to divide the store into modules.
@@ -311,6 +319,8 @@ export default {
 </script>
 ```
 
+[![Edit Vuex modules example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/mo7j05j6vy)
+
 ### Namespaced Vuex modules
 
 By default, mutations and getters inside modules are registered under the global namespace – but you can mark modules as `namespaced` which prevents naming clashes of mutations and getters between modules.
@@ -370,6 +380,8 @@ export default {
 </script>
 ```
 
+[![Edit namespaced Vuex modules example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/mly87n06p)
+
 Or you can pass the module namespace string as the first argument of the `mapFields()` function.
 
 ```html
@@ -390,6 +402,8 @@ export default {
 };
 </script>
 ```
+
+[![Edit namespaced Vuex modules example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/m51j02794p)
 
 ### Multi-row fields
 
@@ -450,6 +464,8 @@ export default {
 };
 </script>
 ```
+
+[![Edit multi-row fields example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/yj1xxx8kn1)
 
 ## Upgrade from 0.x.x to 1.x.x
 
