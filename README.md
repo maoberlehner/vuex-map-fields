@@ -496,6 +496,12 @@ export default new Vuex.Store({
 });
 ```
 
+## Patreon Sponsors
+
+[![Spiffy](https://res.cloudinary.com/maoberlehner/image/upload/c_scale,h_68,q_auto/v1549339992/github/vuex-map-fields/spiffy-logo.png)](https://spiffy.co/)
+
+[Become a sponsor](https://www.patreon.com/maoberlehner) and get your logo in this README with a link to your site.
+
 ## Articles
 
 - [Form Fields, Two-Way Data Binding and Vuex](https://markus.oberlehner.net/blog/form-fields-two-way-data-binding-and-vuex/)
