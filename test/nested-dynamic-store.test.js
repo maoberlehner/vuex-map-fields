@@ -22,7 +22,7 @@ describe(`Component initialized with customized getter and mutation functions.`,
       template: `<input id="foo" v-model="foo3">`,
       computed: {
         ...mapFields([
-          `foo1.foo2.foo3`,
+          `foo1.foo11.foo2.foo3`,
         ]),
       },
     };
@@ -51,8 +51,8 @@ describe(`Component initialized with customized getter and mutation functions.`,
   });
 
   test(`It should update field values when the store is updated.`, () => {
-    store.commit('updateFormField', {path:'foo1.foo2.foo3', value:'fooValue'}, true);
-    // store.state.form.foo1.foo2.foo3 = `fooValue`;
+    store.commit('updateFormField', {path:'foo1.foo11.foo2.foo3', value:'fooValue'}, true);
+    // store.state.form.foo1.foo11.foo2.foo3 = `fooValue`;
 
     expect(wrapper.element.value).toBe(`fooValue`);
   });
@@ -61,6 +61,6 @@ describe(`Component initialized with customized getter and mutation functions.`,
     wrapper.element.value = `fooValue`;
     wrapper.trigger(`input`);
 
-    expect(store.state.form.foo1.foo2.foo3).toBe(`fooValue`);
+    expect(store.state.form.foo1.foo11.foo2.foo3).toBe(`fooValue`);
   });
 });
