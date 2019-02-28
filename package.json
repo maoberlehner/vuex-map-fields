@@ -27,6 +27,9 @@
     "test": "yarn run test:unit && yarn run test:integration",
     "prepublishOnly": "yarn run lint && yarn test && yarn run build"
   },
+  "dependencies": {
+    "vue": "^2.6.2"
+  },
   "devDependencies": {
     "@avalanche/eslint-config": "^3.0.0",
     "@babel/core": "^7.2.2",
@@ -43,7 +46,6 @@
     "rollup": "^1.1.2",
     "rollup-plugin-babel": "^4.3.2",
     "uglify-es": "^3.3.9",
-    "vue": "^2.6.2",
     "vue-template-compiler": "^2.6.2",
     "vuex": "^3.1.0"
   },
