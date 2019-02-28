@@ -1,4 +1,5 @@
 import arrayToObject from './lib/array-to-object';
+import Vue from 'vue';
 
 function normalizeNamespace(fn) {
   return (...params) => {
@@ -18,17 +19,28 @@ function normalizeNamespace(fn) {
 }
 
 export function getField(state) {
-  return path => path.split(/[.[\]]+/).reduce((prev, key) => prev[key], state);
+  return path => path.split(/[.[\]]+/).reduce((prev, key) => prev && prev.hasOwnProperty(key)?prev[key]:null, state);
 }
 
 export function updateField(state, { path, value }) {
+
+  console.log('pathsplit', path.split(/[.[\]]+/));
   path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
-    if (array.length === index + 1) {
-      // eslint-disable-next-line no-param-reassign
-      prev[key] = value;
+    // console.log(`BEFORE: array: ${array}  -- index:${index}  -- key:${key} --- prev:`, prev);
+    // console.log('BEFORE: prev[key]:', prev[key]);
+
+    const nv = index == array.length-1 ? value: prev[key] != null ? prev[key]: {}
+    if (index < array.length - 1){
+      Vue.set(prev, key, prev[key] ? prev[key]: {});
+    }
+    else { // last key
+      Vue.set(prev, key, value);
     }
 
+    // console.log(`AFTER: array: ${array}  -- index:${index}  -- key:${key} --- prev:`, prev);
+
     return prev[key];
+
   }, state);
 }
 
