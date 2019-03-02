@@ -24,7 +24,6 @@ export function getField(state) {
 
 export function updateField(state, { path, value }) {
   path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
-
     if (index < array.length - 1) {
       Vue.set(prev, key, prev[key] ? prev[key] : {});
     } else { // last key
