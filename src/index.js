@@ -24,16 +24,12 @@ export function getField(state) {
 
 export function updateField(state, { path, value }) {
   path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
-    // console.log(`BEFORE: array: ${array}  -- index:${index}  -- key:${key} --- prev:`, prev);
-    // console.log('BEFORE: prev[key]:', prev[key]);
 
     if (index < array.length - 1) {
       Vue.set(prev, key, prev[key] ? prev[key] : {});
     } else { // last key
       Vue.set(prev, key, value);
     }
-
-    // console.log(`AFTER: array: ${array}  -- index:${index}  -- key:${key} --- prev:`, prev);
 
     return prev[key];
   }, state);

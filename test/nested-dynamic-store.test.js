@@ -53,8 +53,19 @@ describe(`Component initialized with customized getter and mutation functions.`,
   test(`It should update field values when the store is updated.`, () => {
     store.commit(`updateFormField`, { path: `foo1.foo11.foo2.foo3`, value: `fooValue` }, true);
     // store.state.form.foo1.foo11.foo2.foo3 = `fooValue`;
-
     expect(wrapper.element.value).toBe(`fooValue`);
+  });
+
+  test(`It should return correct values when different paths have been created`, () => {
+    store.commit(`updateFormField`, { path: `foo1.foo11.foo2.foo3`, value: `fooValue` }, true);
+    store.commit(`updateFormField`, { path: `foo1.foo11.someUglyFoo.foo2.foo99`, value: `otherValue` }, true);
+    expect(store.state.form.foo1.foo11.foo2.foo3).toBe(`fooValue`);
+    expect(store.state.form.foo1.foo11.someUglyFoo.foo2.foo99).toBe(`otherValue`);
+  });
+
+  test(`It should return null values when paths are incorrect`, () => {
+    store.commit(`updateFormField`, { path: `foo1.foo11.foo2.foo3`, value: `fooValue` }, true);
+    expect(wrapper.e).toBe(undefined);
   });
 
   test(`It should update the store when the field values are updated.`, () => {

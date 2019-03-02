@@ -15,6 +15,10 @@ describe(`index`, () => {
     test(`It should return a function which returns the value of the state at the given path.`, () => {
       expect(getField({ foo: { bar: `value` } })(`foo.bar`)).toEqual(`value`);
     });
+
+    test(`It should return a function which returns the value of the state at the given path even when the key chain is invalid`, () => {
+      expect(getField({ foo: { bar: `value` } })(`foo.extra.bar`)).toBeNull();
+    });
   });
 
   describe(`updateField()`, () => {
@@ -27,6 +31,15 @@ describe(`index`, () => {
       const expectedResult = { foo: { bar: `new value` } };
 
       updateField(mockState, { path: `foo.bar`, value: `new value` });
+
+      expect(mockState).toEqual(expectedResult);
+    });
+
+    test(`It should override the key at the given path in the state with the given value even when the key chain is broken.`, () => {
+      const mockState = { foo: { bar: `initial value` } };
+      const expectedResult = { foo: { bar: `initial value`, extra: { extrabar: `new value` } } };
+
+      updateField(mockState, { path: `foo.extra.extrabar`, value: `new value` });
 
       expect(mockState).toEqual(expectedResult);
     });
