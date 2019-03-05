@@ -25,7 +25,8 @@
     "test:integration": "yarn run fake-publish && jest test",
     "test:coverage": "yarn run fake-publish && jest --coverage --maxWorkers=4",
     "test": "yarn run test:unit && yarn run test:integration",
-    "prepublishOnly": "yarn run lint && yarn test && yarn run build"
+    "prepublishOnly": "yarn run lint && yarn test && yarn run build",
+    "preinstall":"yarn && yarn build"
   },
   "dependencies": {
     "vue": "^2.6.2"
