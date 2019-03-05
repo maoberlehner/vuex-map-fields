@@ -26,7 +26,7 @@
     "test:coverage": "yarn run fake-publish && jest --coverage --maxWorkers=4",
     "test": "yarn run test:unit && yarn run test:integration",
     "prepublishOnly": "yarn run lint && yarn test && yarn run build",
-    "postinstall":"yarn && yarn build"
+    "prepare": "yarn build"
   },
   "dependencies": {
     "vue": "^2.6.2"
@@ -46,6 +46,7 @@
     "jest": "^24.0.0",
     "rollup": "^1.1.2",
     "rollup-plugin-babel": "^4.3.2",
+    "typescript":"^3.3.3333",
     "uglify-es": "^3.3.9",
     "vue-template-compiler": "^2.6.2",
     "vuex": "^3.1.0"
