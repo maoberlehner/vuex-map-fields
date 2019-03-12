@@ -397,7 +397,7 @@ import { mapFields } from 'vuex-map-fields';
 export default {
   computed: {
     // `fooModule` is the name of the Vuex module.
-    ...mapFields(`fooModule`, ['foo']),
+    ...mapFields('fooModule', ['foo']),
   },
 };
 </script>
