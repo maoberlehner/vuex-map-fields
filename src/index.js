@@ -52,7 +52,31 @@ export const mapFields = normalizeNamespace((namespace, fields, getterType, muta
     return prev;
   }, {});
 });
+const mapObjField = (path, fieldsObject, index, store, getterType, mutationType) =>
+  Object.keys(fieldsObject).reduce((prev, fieldKey) => {
+    const fieldPath = `${path}[${index}].${fieldKey}`;
+    let subRows = fieldsObject[fieldKey];
+    if (Array.isArray(subRows)) {
+      return mapSubRows(fieldPath, subRows, fieldKey, prev, store, getterType, mutationType);
+    }
+    return Object.defineProperty(prev, fieldKey, {
+      get() {
+        return store.getters[getterType](fieldPath);
+      },
+      set(value) {
+        store.commit(mutationType, { path: fieldPath, value });
+      },
+    });
 
+  }, {})
+
+const mapSubRows = (fieldPath, subRows, key, prev, store, getterType, mutationType) => {
+  let tmpRows = subRows.map((sub, subIndex) =>
+    mapObjField(fieldPath, sub, subIndex, store, getterType, mutationType)
+  )
+  prev[key] = tmpRows;
+  return prev
+}
 export const mapMultiRowFields = normalizeNamespace((
   namespace,
   paths,
@@ -63,29 +87,16 @@ export const mapMultiRowFields = normalizeNamespace((
 
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
-
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
         const store = this.$store;
         const rows = store.getters[getterType](path);
-
         return rows.map((fieldsObject, index) =>
-          Object.keys(fieldsObject).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${index}].${fieldKey}`;
-
-            return Object.defineProperty(prev, fieldKey, {
-              get() {
-                return store.getters[getterType](fieldPath);
-              },
-              set(value) {
-                store.commit(mutationType, { path: fieldPath, value });
-              },
-            });
-          }, {}));
+          mapObjField(path, fieldsObject, index, store, getterType, mutationType)
+        );
       },
     };
-
     return entries;
   }, {});
 });
