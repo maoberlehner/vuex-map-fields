@@ -79,3 +79,77 @@ describe(`Component initialized with multi row setup.`, () => {
     expect(store.state.users[1].email).toBe(`new@email.com`);
   });
 });
+
+describe(`Component initialized with deep nested multi row setup.`, () => {
+  let Component;
+  let store;
+  let wrapper;
+
+  beforeEach(() => {
+    Component = {
+      template: `
+        <div>
+          <div v-for="(user, index) in users">
+            <input :class="'street-' + index" v-model="user.addresses[0].street">
+            <input :class="'number-' + index" v-model="user.addresses[0].number">
+          </div>
+        </div>
+      `,
+      computed: {
+        ...mapMultiRowFields([`users`]),
+      },
+    };
+
+    store = new Vuex.Store({
+      state: {
+        users: [
+          {
+            name: `Foo`,
+            email: `foo@foo.com`,
+            addresses: [{
+              street: `Rua da Batata`,
+              number: 42,
+            }],
+          },
+          {
+            name: `Bar`,
+            email: `bar@bar.com`,
+            addresses: [{
+              street: `Rua da Batata`,
+              number: 42,
+            }],
+          },
+        ],
+      },
+      getters: {
+        getField,
+      },
+      mutations: {
+        updateField,
+      },
+    });
+
+    wrapper = shallowMount(Component, { localVue, store });
+  });
+
+  test(`It should render the component.`, () => {
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  test(`It should update deep field values when the store is updated.`, () => {
+    store.state.users[1].addresses[0].street = `New Street`;
+    store.state.users[1].addresses[0].number = 43;
+
+    expect(wrapper.find(`.street-1`).element.value).toBe(`New Street`);
+    expect(wrapper.find(`.number-1`).element.value).toBe(`43`);
+  });
+
+  test(`It should update the store when the field values are updated. blau`, () => {
+    wrapper.find(`.street-0`).element.value = `New Street`;
+    wrapper.find(`.street-0`).trigger(`input`);
+    wrapper.find(`.number-1`).element.value = `43`;
+    wrapper.find(`.number-1`).trigger(`input`);
+    expect(store.state.users[0].addresses[0].street).toBe(`New Street`);
+    expect(store.state.users[1].addresses[0].number).toBe(`43`);
+  });
+});

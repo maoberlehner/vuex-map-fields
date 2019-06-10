@@ -137,7 +137,7 @@ describe(`index`, () => {
   describe(`mapMultiRowFields()`, () => {
     test(`It should be possible to re-map the initial path.`, () => {
       const expectedResult = {
-        otherFieldRows: { get: expect.any(Function) },
+        otherFieldRows: { get: expect.any(Function), set: expect.any(Function) },
       };
 
       expect(mapMultiRowFields({ otherFieldRows: `fieldRows` })).toEqual(expectedResult);
@@ -163,11 +163,11 @@ describe(`index`, () => {
 
       // eslint-disable-next-line no-unused-vars
       const x = getterSetters[0].bar; // Trigger getter function.
-      expect(mockGetField).lastCalledWith(`fieldRows[0].bar`);
+      expect(mockGetField).lastCalledWith(`fieldRows.0.bar`);
 
       // eslint-disable-next-line no-unused-vars
       const y = getterSetters[1].foo; // Trigger getter function.
-      expect(mockGetField).lastCalledWith(`fieldRows[1].foo`);
+      expect(mockGetField).lastCalledWith(`fieldRows.1.foo`);
     });
 
     test(`It should commit new values to the store.`, () => {
@@ -192,10 +192,10 @@ describe(`index`, () => {
       });
 
       getterSetters[0].bar = `New Bar`; // Trigger setter function.
-      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[0].bar`, value: `New Bar` });
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows.0.bar`, value: `New Bar` });
 
       getterSetters[1].foo = `New Foo`; // Trigger setter function.
-      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[1].foo`, value: `New Foo` });
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows.1.foo`, value: `New Foo` });
     });
   });
 
@@ -230,6 +230,7 @@ describe(`index`, () => {
       const expectedResult = {
         foo: {
           get: expect.any(Function),
+          set: expect.any(Function),
         },
       };
 

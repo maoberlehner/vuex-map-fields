@@ -64,5 +64,8 @@
       "/node_modules/",
       "/test/package/"
     ]
+  },
+  "dependencies": {
+    "traverse": "^0.6.6"
   }
 }

@@ -1,4 +1,51 @@
+import traverse from 'traverse';
 import arrayToObject from './lib/array-to-object';
+
+function computeTree(store, obj, mutationType, getterType, rootPath) {
+  // eslint-disable-next-line no-param-reassign
+  obj = JSON.parse(JSON.stringify(obj));
+
+  return traverse(obj).forEach(function nodeHandler(v) {
+    const path = `${rootPath}.${this.path.join(`.`)}`;
+    if (this.isLeaf) {
+      Object.defineProperty(
+        this.parent.node,
+        this.key, // eslint-disable-next-line no-use-before-define
+        buildLeafPropertyObject(store, path, getterType, mutationType),
+      );
+    } else if (!this.isRoot) {
+      Object.defineProperty(
+        this.parent.node,
+        this.key, // eslint-disable-next-line no-use-before-define
+        buildBranchPropertyObject(store, v, path, getterType, mutationType),
+      );
+    }
+  });
+}
+
+function buildLeafPropertyObject(store, path, getterType, mutationType) {
+  return {
+    get() {
+      return store.getters[getterType](path);
+    },
+    set(value) {
+      store.commit(mutationType, { path, value });
+    },
+  };
+}
+
+function buildBranchPropertyObject(store, computedValue, path, getterType, mutationType) {
+  return {
+    get() {
+      return computedValue;
+    },
+    set(value) {
+      store.commit(mutationType, { path, value });
+      // eslint-disable-next-line no-param-reassign
+      computedValue = computeTree(store, value, mutationType, getterType, path);
+    },
+  };
+}
 
 function normalizeNamespace(fn) {
   return (...params) => {
@@ -63,26 +110,27 @@ export const mapMultiRowFields = normalizeNamespace((
 
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
-
+    let computedEntry;
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
         const store = this.$store;
-        const rows = store.getters[getterType](path);
+        if (computedEntry) {
+          return computedEntry;
+        }
 
-        return rows.map((fieldsObject, index) =>
-          Object.keys(fieldsObject).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${index}].${fieldKey}`;
+        const state = store.getters[getterType](path);
+        computedEntry = computeTree(store, state, mutationType, getterType, path);
+        return computedEntry;
+      },
+      set(value) {
+        const store = this.$store;
+        store.commit(mutationType, { path, value });
 
-            return Object.defineProperty(prev, fieldKey, {
-              get() {
-                return store.getters[getterType](fieldPath);
-              },
-              set(value) {
-                store.commit(mutationType, { path: fieldPath, value });
-              },
-            });
-          }, {}));
+        if (typeof value !== `object`) { store.commit(mutationType, { path, value }); } else {
+          const state = store.getters[getterType](path);
+          computedEntry = computeTree(store, state, mutationType, getterType, path);
+        }
       },
     };
 
