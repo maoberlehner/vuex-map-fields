@@ -39,10 +39,25 @@ export const mapFields = normalizeNamespace((namespace, fields, getterType, muta
     const path = fieldsObject[key];
     const field = {
       get() {
+        const isFunctionGetter = typeof path === `function`;
+        if (isFunctionGetter) {
+          const param = path.call(this);
+          const getter = this.$store.getters(param);
+          return typeof getter === `function`
+            ? getter(path.name)
+            : getter;
+        }
+
         return this.$store.getters[getterType](path);
       },
       set(value) {
-        this.$store.commit(mutationType, { path, value });
+        const isFunctionGetter = typeof path === `function`;
+        const param = isFunctionGetter ? path.call(this) : null;
+        const values = { path, value };
+        if (param) {
+          values.param = param;
+        }
+        this.$store.commit(mutationType, values);
       },
     };
 
@@ -63,23 +78,39 @@ export const mapMultiRowFields = normalizeNamespace((
 
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
-
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
+        // eslint-disable-next-line no-unused-vars
+        let param = null;
+        const isFunctionGetter = typeof path === `function`;
+        if (isFunctionGetter) {
+          param = path.call(this);
+        }
         const store = this.$store;
-        const rows = store.getters[getterType](path);
+        const getter = store.getters[getterType];
+        const pathToUse = isFunctionGetter ? path.name : path;
+        const rows = isFunctionGetter
+          ? getter(param)(pathToUse)
+          : getter(pathToUse);
 
         return rows.map((fieldsObject, index) =>
           Object.keys(fieldsObject).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${index}].${fieldKey}`;
+            const fieldPath = `${pathToUse}[${index}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
               get() {
-                return store.getters[getterType](fieldPath);
+                if (isFunctionGetter) {
+                  return getter(param)(fieldPath);
+                }
+                return getter(fieldPath);
               },
               set(value) {
-                store.commit(mutationType, { path: fieldPath, value });
+                const values = { path: fieldPath, value };
+                if (param) {
+                  values.param = param;
+                }
+                store.commit(mutationType, values);
               },
             });
           }, {}));
