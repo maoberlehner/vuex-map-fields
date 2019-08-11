@@ -42,10 +42,7 @@ export const mapFields = normalizeNamespace((namespace, fields, getterType, muta
         const isFunctionGetter = typeof path === `function`;
         if (isFunctionGetter) {
           const param = path.call(this);
-          const getter = this.$store.getters(param);
-          return typeof getter === `function`
-            ? getter(path.name)
-            : getter;
+          return this.$store.getters[getterType](param)(path.name);
         }
 
         return this.$store.getters[getterType](path);
