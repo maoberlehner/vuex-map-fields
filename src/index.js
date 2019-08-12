@@ -50,7 +50,7 @@ export const mapFields = normalizeNamespace((namespace, fields, getterType, muta
       set(value) {
         const isFunctionGetter = typeof path === `function`;
         const param = isFunctionGetter ? path.call(this) : null;
-        const values = { path, value };
+        const values = { path: isFunctionGetter ? path.name : path, value };
         if (param) {
           values.param = param;
         }
