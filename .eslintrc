@@ -10,6 +10,6 @@
   "plugins": ["compat"],
   "extends": "@avalanche/eslint-config",
   "rules": {
-    "compat/compat": 2
+    "compat/compat": "error"
   }
 }
