@@ -3,8 +3,9 @@ import arrayToObject from './lib/array-to-object';
 function normalizeNamespace(fn) {
   return (...params) => {
     // eslint-disable-next-line prefer-const
-    let [namespace, map, getterType, mutationType] =
-      typeof params[0] === `string` ? [...params] : [``, ...params];
+    let [namespace, map, getterType, mutationType] = typeof params[0] === `string`
+      ? [...params]
+      : [``, ...params];
 
     if (namespace.length && namespace.charAt(namespace.length - 1) !== `/`) {
       namespace += `/`;
@@ -70,8 +71,8 @@ export const mapMultiRowFields = normalizeNamespace((
         const store = this.$store;
         const rows = store.getters[getterType](path);
 
-        return rows.map((fieldsObject, index) =>
-          Object.keys(fieldsObject).reduce((prev, fieldKey) => {
+        return rows
+          .map((fieldsObject, index) => Object.keys(fieldsObject).reduce((prev, fieldKey) => {
             const fieldPath = `${path}[${index}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
@@ -93,8 +94,16 @@ export const mapMultiRowFields = normalizeNamespace((
 export const createHelpers = ({ getterType, mutationType }) => ({
   [getterType]: getField,
   [mutationType]: updateField,
-  mapFields: normalizeNamespace((namespace, fields) =>
-    mapFields(namespace, fields, getterType, mutationType)),
-  mapMultiRowFields: normalizeNamespace((namespace, paths) =>
-    mapMultiRowFields(namespace, paths, getterType, mutationType)),
+  mapFields: normalizeNamespace((namespace, fields) => mapFields(
+    namespace,
+    fields,
+    getterType,
+    mutationType,
+  )),
+  mapMultiRowFields: normalizeNamespace((namespace, paths) => mapMultiRowFields(
+    namespace,
+    paths,
+    getterType,
+    mutationType,
+  )),
 });
