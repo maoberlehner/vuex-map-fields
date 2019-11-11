@@ -71,19 +71,29 @@ export const mapMultiRowFields = normalizeNamespace((
         const store = this.$store;
         const rows = store.getters[getterType](path);
 
-        return rows
-          .map((fieldsObject, index) => Object.keys(fieldsObject).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${index}].${fieldKey}`;
+        const defineProperties = (fieldsObject, index, path) => {
+          return Object.keys(fieldsObject).reduce((prev, fieldKey) => {
+
+            let fieldPath = index !== false ? `${path}[${index}].${fieldKey}` : `${path}.${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
               get() {
+                if (typeof fieldsObject[fieldKey] === 'object' && fieldsObject[fieldKey] !== null) {
+                  return defineProperties(fieldsObject[fieldKey], false, fieldPath)
+                }
                 return store.getters[getterType](fieldPath);
               },
               set(value) {
                 store.commit(mutationType, { path: fieldPath, value });
               },
             });
-          }, {}));
+          }, {})
+        };
+
+        return rows
+          .map((fieldsObject, index) => {
+            return defineProperties(fieldsObject, index, path)
+          });
       },
     };
 
