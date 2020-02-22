@@ -1,5 +1,9 @@
 import arrayToObject from './lib/array-to-object';
 
+function objectEntries(obj) {
+  return Object.keys(obj).map(key => [key, obj[key]]);
+}
+
 function normalizeNamespace(fn) {
   return (...params) => {
     // eslint-disable-next-line prefer-const
@@ -69,10 +73,10 @@ export const mapMultiRowFields = normalizeNamespace((
     entries[key] = {
       get() {
         const store = this.$store;
-        const rows = Object.entries(store.getters[getterType](path));
+        const rows = objectEntries(store.getters[getterType](path));
 
         return rows
-          .map((fieldsObject, index) => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
+          .map(fieldsObject => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
             const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
