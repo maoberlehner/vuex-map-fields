@@ -23,7 +23,7 @@ export function getField(state) {
 }
 
 export function updateField(state, { path, value }) {
-  path.split(/[.[\]]+/).reduce((prev, key, index, array) => {
+  path.split(/[.[\]]+/).filter((x) => x ).reduce((prev, key, index, array) => {
     if (array.length === index + 1) {
       // eslint-disable-next-line no-param-reassign
       prev[key] = value;
@@ -85,6 +85,49 @@ export const mapMultiRowFields = normalizeNamespace((
             });
           }, {}));
       },
+    };
+
+    return entries;
+  }, {});
+});
+
+export const mapRowFields = normalizeNamespace((
+  namespace,
+  paths,
+  getterType,
+  mutationType,
+) => {
+  const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
+
+  return Object.keys(pathsObject).reduce((entries, key) => {
+    const path = pathsObject[key];
+
+    // eslint-disable-next-line no-param-reassign
+    entries[key] = {
+      get() {
+        const store = this.$store;
+        const row = store.getters[getterType](path);
+        if(!row) return {};
+
+        return Object.keys(row).reduce((prev, fieldKey) => {
+            const fieldPath = `${path}.${fieldKey}`
+            return Object.defineProperty(prev, fieldKey, {
+              get() {
+                return store.getters[getterType](fieldPath);
+              },
+              set(value) {
+                store.commit(mutationType, { path: fieldPath, value });
+              },
+            });
+          }, {});
+      },
+      set(value){
+        var store = this.$store;
+        store.commit(mutationType, {
+          path,
+          value
+        });
+      }
     };
 
     return entries;
