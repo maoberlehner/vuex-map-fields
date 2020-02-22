@@ -72,7 +72,7 @@ export const mapMultiRowFields = normalizeNamespace((
         const rows = Object.entries(store.getters[getterType](path));
 
         return rows
-          .map((fieldsObject, index) => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
+          .map(fieldsObject => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
             const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
