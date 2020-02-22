@@ -57,7 +57,9 @@
     "url": "https://github.com/maoberlehner/vuex-map-fields/issues"
   },
   "browserslist": [
-    "last 2 versions"
+    "> 0.5%",
+    "not ie <= 10",
+    "not op_mini all"
   ],
   "jest": {
     "coveragePathIgnorePatterns": [
