@@ -1,6 +1,6 @@
 {
   "name": "vuex-map-fields",
-  "version": "1.3.6",
+  "version": "1.4.0",
   "description": "Enable two-way data binding for form fields saved in a Vuex store",
   "keywords": [
     "vue",
