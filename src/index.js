@@ -119,13 +119,6 @@ export const mapRowFields = normalizeNamespace((
               },
             });
           }, {});
-      },
-      set(value){
-        var store = this.$store;
-        store.commit(mutationType, {
-          path,
-          value
-        });
       }
     };
 
