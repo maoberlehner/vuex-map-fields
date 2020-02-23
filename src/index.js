@@ -19,7 +19,7 @@ function normalizeNamespace(fn) {
 }
 
 export function getField(state) {
-  return path => path.split(/[.[\]]+/).reduce((prev, key) => prev[key], state);
+  return path => path.split(/[.[\]]+/).filter((x) => x ).reduce((prev, key) => prev[key], state);
 }
 
 export function updateField(state, { path, value }) {
@@ -98,7 +98,6 @@ export const mapRowFields = normalizeNamespace((
   mutationType,
 ) => {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
-
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
 
