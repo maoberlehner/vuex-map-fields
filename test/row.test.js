@@ -18,10 +18,13 @@ describe(`Component initialized with row setup.`, () => {
         <div>
           <input v-model="user.name">
           <input v-model="user.email">
+          <pre>
+          {{noUser}}
+          </pre>
         </div>
       `,
       computed: {
-        ...mapRowFields({user: `users[0]`}),
+        ...mapRowFields([{user: `users[0]`}, {noUser: `users[2]`}]),
       },
     };
 
