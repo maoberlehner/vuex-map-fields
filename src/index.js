@@ -68,12 +68,13 @@ export const mapMultiRowFields = normalizeNamespace((
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
+        let tpath = typeof path === "function" ? path.call(null, this) : path;
         const store = this.$store;
-        const rows = Object.entries(store.getters[getterType](path));
+        const rows = Object.entries(store.getters[getterType](tpath));
 
         return rows
           .map((fieldsObject, index) => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
+            const fieldPath = `${tpath}[${fieldsObject[0]}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
               get() {
@@ -98,18 +99,21 @@ export const mapRowFields = normalizeNamespace((
   mutationType,
 ) => {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
+  // console.log(pathsObject);
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
 
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
+        let tpath = typeof path === "function" ? path.call(null, this) : path;
         const store = this.$store;
-        const row = store.getters[getterType](path);
+        const row = store.getters[getterType](tpath);
+       
         if(!row) return {};
 
         return Object.keys(row).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}.${fieldKey}`
+            const fieldPath = `${tpath}.${fieldKey}`
             return Object.defineProperty(prev, fieldKey, {
               get() {
                 return store.getters[getterType](fieldPath);

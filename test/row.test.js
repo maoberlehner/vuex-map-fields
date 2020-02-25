@@ -16,19 +16,24 @@ describe(`Component initialized with row setup.`, () => {
     Component = {
       template: `
         <div>
-          <input v-model="user.name">
-          <input v-model="user.email">
+          <input v-model="userFun.name">
+          <input v-model="userFun.email">
           <pre>
-          {{user1}}
+          {{user0}}
           </pre>
           <pre>
           {{noUser}}
           </pre>
         </div>
       `,
+      data() {
+        return {
+          ative_room: '0'
+        };
+      },
       computed: {
-        ...mapRowFields({user: `users[0]`}),
-        ...mapRowFields([{user1: `users[1]`}, {noUser: `users[2]`}]),
+        ...mapRowFields([{userFun: (c) => { return `users[${c.ative_room}]`; }}, {user0: `users[0]`}]),
+        ...mapRowFields({noUser: `users[2]`}),
       },
     };
 
