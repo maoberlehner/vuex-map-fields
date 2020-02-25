@@ -20,10 +20,14 @@ describe(`Component initialized with multi row setup.`, () => {
             <input v-model="user.name">
             <input v-model="user.email">
           </div>
+          <div v-for="user in usersfun">
+            <input v-model="user.name">
+            <input v-model="user.email">
+          </div>
         </div>
       `,
       computed: {
-        ...mapMultiRowFields([`users`]),
+        ...mapMultiRowFields([`users`, { usersfun: () => { return 'users'; }}]),
       },
     };
 

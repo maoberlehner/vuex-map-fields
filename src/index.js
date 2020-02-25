@@ -46,7 +46,6 @@ export const mapFields = normalizeNamespace((namespace, fields, getterType, muta
         this.$store.commit(mutationType, { path, value });
       },
     };
-
     // eslint-disable-next-line no-param-reassign
     prev[key] = field;
 
@@ -64,7 +63,6 @@ export const mapMultiRowFields = normalizeNamespace((
 
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
-
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
@@ -87,7 +85,6 @@ export const mapMultiRowFields = normalizeNamespace((
           }, {}));
       },
     };
-
     return entries;
   }, {});
 });
@@ -99,10 +96,8 @@ export const mapRowFields = normalizeNamespace((
   mutationType,
 ) => {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
-  // console.log(pathsObject);
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
-
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
@@ -125,7 +120,6 @@ export const mapRowFields = normalizeNamespace((
           }, {});
       }
     };
-
     return entries;
   }, {});
 });
