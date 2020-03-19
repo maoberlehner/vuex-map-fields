@@ -18,19 +18,21 @@
     "lint": "yarn run lint:scripts && yarn run lint:scripts-md",
     "coveralls": "yarn run test:coverage && cat coverage/lcov.info | coveralls",
     "test:unit": "jest src",
-    "test:integration": "yarn run fake-publish && jest test",
-    "test:coverage": "yarn run fake-publish && jest --coverage --maxWorkers=4",
+    "test:integration": "cross-env NODE_ENV=test yarn run fake-publish && jest test",
+    "test:coverage": "cross-env NODE_ENV=test yarn run fake-publish && jest --coverage --maxWorkers=4",
     "test": "yarn run test:unit && yarn run test:integration",
     "prepublishOnly": "yarn run lint && yarn test && yarn run build"
   },
   "devDependencies": {
     "@avalanche/eslint-config": "^4.0.0",
     "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^25.1.0",
     "coveralls": "^3.0.9",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-compat": "^3.5.1",
     "eslint-plugin-import": "^2.20.1",
@@ -62,5 +64,8 @@
       "/node_modules/",
       "/test/package/"
     ]
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.8.7"
   }
 }
