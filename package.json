@@ -11,38 +11,36 @@
   "homepage": "https://github.com/maoberlehner/vuex-map-fields",
   "license": "MIT",
   "scripts": {
-    "scripts:umd": "rollup --config --output.format umd --name vuex-map-fields --output.file dist/index.js src/index.js",
-    "scripts:es": "rollup --config --output.format es --name vuex-map-fields --output.file dist/index.esm.js src/index.js",
-    "scripts:minify": "uglifyjs --compress --mangle --comments --output dist/index.min.js dist/index.js && uglifyjs --compress --mangle --comments --output dist/index.esm.min.js dist/index.esm.js",
-    "scripts": "yarn run scripts:umd && yarn run scripts:es && yarn run scripts:minify",
-    "build": "yarn run scripts",
+    "build": "rollup -c",
     "fake-publish": "yarn run build && sh test/utils/fake-publish.sh",
     "lint:scripts": "yarn run fake-publish && eslint --ignore-path .gitignore .",
     "lint:scripts-md": "eslint --config .eslintrc-md.json --ext md --ignore-path .gitignore .",
     "lint": "yarn run lint:scripts && yarn run lint:scripts-md",
     "coveralls": "yarn run test:coverage && cat coverage/lcov.info | coveralls",
     "test:unit": "jest src",
-    "test:integration": "yarn run fake-publish && jest test",
-    "test:coverage": "yarn run fake-publish && jest --coverage --maxWorkers=4",
+    "test:integration": "cross-env NODE_ENV=test yarn run fake-publish && jest test",
+    "test:coverage": "cross-env NODE_ENV=test yarn run fake-publish && jest --coverage --maxWorkers=4",
     "test": "yarn run test:unit && yarn run test:integration",
     "prepublishOnly": "yarn run lint && yarn test && yarn run build"
   },
   "devDependencies": {
     "@avalanche/eslint-config": "^4.0.0",
     "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^25.1.0",
     "coveralls": "^3.0.9",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-compat": "^3.5.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-markdown": "^1.0.1",
     "jest": "^25.1.0",
-    "rollup": "^1.31.1",
+    "rollup": "^2.1.0",
     "rollup-plugin-babel": "^4.3.3",
-    "uglify-es": "^3.3.9",
+    "rollup-plugin-terser": "^5.3.0",
     "vue": "^2.6.11",
     "vue-template-compiler": "^2.6.11",
     "vuex": "^3.1.2"
@@ -66,5 +64,8 @@
       "/node_modules/",
       "/test/package/"
     ]
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.8.7"
   }
 }
