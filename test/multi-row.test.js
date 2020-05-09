@@ -27,7 +27,7 @@ describe(`Component initialized with multi row setup.`, () => {
         </div>
       `,
       computed: {
-        ...mapMultiRowFields([`users`, { usersfun: () => `users` }}]),
+        ...mapMultiRowFields([`users`, { usersfun: () => `users` }]),
       },
     };
 
