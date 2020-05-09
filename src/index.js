@@ -143,4 +143,10 @@ export const createHelpers = ({ getterType, mutationType }) => ({
     getterType,
     mutationType,
   )),
+  mapRowFields: normalizeNamespace((namespace, paths) => mapRowFields(
+    namespace,
+    paths,
+    getterType,
+    mutationType,
+  )),
 });
