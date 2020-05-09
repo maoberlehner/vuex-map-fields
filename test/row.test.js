@@ -1,11 +1,16 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 
-import { mapRowFields, getField, updateField } from '../src';
+import { createHelpers, getField, updateField } from '../src';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+
+const { mapRowFields } = createHelpers({
+  getterType: `getField`,
+  mutationType: `updateField`,
+});
 
 describe(`Component initialized with row setup.`, () => {
   let Component;

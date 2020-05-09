@@ -1,6 +1,7 @@
 export default function arrayToObject(fields = []) {
   return fields.reduce((prev, path) => {
-  	if(typeof path === "object") return Object.assign(prev, path);
+    if (typeof path === `object`) return { ...prev, ...path };
+
     const key = path.split(`.`).slice(-1)[0];
 
     if (prev[key]) {

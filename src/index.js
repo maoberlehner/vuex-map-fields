@@ -23,11 +23,11 @@ function normalizeNamespace(fn) {
 }
 
 export function getField(state) {
-  return path => path.split(/[.[\]]+/).filter((x) => x ).reduce((prev, key) => prev[key], state);
+  return path => path.split(/[.[\]]+/).filter(x => x).reduce((prev, key) => prev[key], state);
 }
 
 export function updateField(state, { path, value }) {
-  path.split(/[.[\]]+/).filter((x) => x ).reduce((prev, key, index, array) => {
+  path.split(/[.[\]]+/).filter(x => x).reduce((prev, key, index, array) => {
     if (array.length === index + 1) {
       // eslint-disable-next-line no-param-reassign
       prev[key] = value;
@@ -50,6 +50,7 @@ export const mapFields = normalizeNamespace((namespace, fields, getterType, muta
         this.$store.commit(mutationType, { path, value });
       },
     };
+
     // eslint-disable-next-line no-param-reassign
     prev[key] = field;
 
@@ -67,16 +68,17 @@ export const mapMultiRowFields = normalizeNamespace((
 
   return Object.keys(pathsObject).reduce((entries, key) => {
     const path = pathsObject[key];
+
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
-        let tpath = typeof path === "function" ? path.call(null, this) : path;
+        const tpath = typeof path === `function` ? path.call(null, this) : path;
         const store = this.$store;
-        const rows = objectEntries(store.getters[getterType](path));
+        const rows = objectEntries(store.getters[getterType](tpath));
 
         return rows
           .map(fieldsObject => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
+            const fieldPath = `${tpath}[${fieldsObject[0]}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
               get() {
@@ -89,6 +91,7 @@ export const mapMultiRowFields = normalizeNamespace((
           }, {}));
       },
     };
+
     return entries;
   }, {});
 });
@@ -105,25 +108,26 @@ export const mapRowFields = normalizeNamespace((
     // eslint-disable-next-line no-param-reassign
     entries[key] = {
       get() {
-        let tpath = typeof path === "function" ? path.call(null, this) : path;
+        const tpath = typeof path === `function` ? path.call(null, this) : path;
         const store = this.$store;
         const row = store.getters[getterType](tpath);
-       
-        if(!row) return {};
+
+        if (!row) return {};
 
         return Object.keys(row).reduce((prev, fieldKey) => {
-            const fieldPath = `${tpath}.${fieldKey}`
-            return Object.defineProperty(prev, fieldKey, {
-              get() {
-                return store.getters[getterType](fieldPath);
-              },
-              set(value) {
-                store.commit(mutationType, { path: fieldPath, value });
-              },
-            });
-          }, {});
-      }
+          const fieldPath = `${tpath}.${fieldKey}`;
+          return Object.defineProperty(prev, fieldKey, {
+            get() {
+              return store.getters[getterType](fieldPath);
+            },
+            set(value) {
+              store.commit(mutationType, { path: fieldPath, value });
+            },
+          });
+        }, {});
+      },
     };
+
     return entries;
   }, {});
 });
