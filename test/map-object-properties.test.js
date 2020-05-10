@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-const { mapRowFields } = createHelpers({
+const { mapFields } = createHelpers({
   getterType: `getField`,
   mutationType: `updateField`,
 });
@@ -18,18 +18,15 @@ describe(`Component initialized with row setup.`, () => {
   let wrapper;
 
   beforeEach(() => {
+
     Component = {
       template: `
         <div>
-          <input v-model="userFun.name">
-          <input v-model="userFun.email">
-          <pre>
-          {{user0}}
-          </pre>
-          <pre>
-          {{noUser}}
-          </pre>
-        </div>
+          <div>
+            <input v-model="user.name">
+            <input v-model="user.email">
+          </div>
+      </div>
       `,
       data() {
         return {
@@ -37,9 +34,8 @@ describe(`Component initialized with row setup.`, () => {
         };
       },
       computed: {
-        ...mapRowFields([{userFun: (c) => { return `users[${c.ative_room}]`; }}, {user0: `users[0]`}]),
-        ...mapRowFields({noUser: `users[2]`}),
-      },
+        ...mapFields({user: `users[0]` }),
+      }
     };
 
     store = new Vuex.Store({
@@ -75,12 +71,16 @@ describe(`Component initialized with row setup.`, () => {
     store.state.users[0].email = `new@email.com`;
 
     expect(wrapper.find(`input`).element.value).toBe(`New Name`);
+    expect(wrapper.find(`input:nth-child(2)`).element.value).toBe(`new@email.com`);
   });
 
   test(`It should update the store when the field values are updated.`, () => {
-    wrapper.find(`input`).element.value = `New Name`;
+    wrapper.find(`input`).element.value = `Foo`;
+    wrapper.find(`input:nth-child(2)`).element.value = `foo@foo.com`;
     wrapper.find(`input`).trigger(`input`);
+    wrapper.find(`input:nth-child(2)`).trigger(`input`);
 
-    expect(store.state.users[0].name).toBe(`New Name`);
+    expect(store.state.users[0].name).toBe(`Foo`);
+    expect(store.state.users[0].email).toBe(`foo@foo.com`);
   });
 });
