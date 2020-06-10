@@ -23,7 +23,7 @@ function normalizeNamespace(fn) {
 }
 
 export function getField(state) {
-  return path => path.split(/[.[\]]+/).reduce((prev, key) => prev[key], state);
+  return path => path.split(/[.[\]]+/).reduce((prev, key) => (prev ? prev[key] : undefined), state);
 }
 
 export function updateField(state, { path, value }) {
