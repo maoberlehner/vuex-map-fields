@@ -110,4 +110,79 @@ export const createHelpers = ({ getterType, mutationType }) => ({
     getterType,
     mutationType,
   )),
+<<<<<<< Updated upstream
+=======
+  mapDynamicFields: normalizeNamespace((namespace, fields, options) => mapFields(
+    namespace,
+    fields,
+    options
+  )),
+  mapDynamicMultiRowFields: normalizeNamespace((namespace, paths, options) => mapFields(
+    namespace,
+    paths,
+    options
+  )),
+});
+
+
+export const mapDynamicFields = normalizeNamespace((namespace, fields, options) => {
+  const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
+
+  return Object.keys(fieldsObject).reduce((prev, key) => {
+    const field = {
+      get() {
+        // 'this' refer to vue component
+        const path = fieldsObject[key].replace(`PATH`, this[options.pathField]);
+
+        return this.$store.getters[`${namespace}getField`](path);
+      },
+      set(value) {
+        // 'this' refer to vue component
+        const path = fieldsObject[key].replace(`PATH`, this[options.pathField]);
+
+        this.$store.commit(`${namespace}updateField`, { path, value });
+      }
+    };
+
+    prev[key] = field;
+
+    return prev;
+  }, {});
+});
+
+export const mapDynamicMultiRowFields = normalizeNamespace((namespace, paths, options) => {
+  const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
+
+  return Object.keys(pathsObject).reduce((entries, key) => {
+    // eslint-disable-next-line no-param-reassign
+    entries[key] = {
+      get() {
+        const store = this.$store;
+        const path = pathsObject[key].replace(
+          `PATH`,
+          this[options.pathField]
+        );
+        const rows = store.getters[`${namespace}getField`](path);
+
+        return rows.map((fieldsObject, index) => Object.keys(fieldsObject).reduce((prev, fieldKey) => {
+            const fieldPath = `${path}[${index}].${fieldKey}`;
+
+            return Object.defineProperty(prev, fieldKey, {
+              get() {
+                return store.getters[`${namespace}getField`](fieldPath);
+              },
+              set(value) {
+                store.commit(`${namespace}updateField`, {
+                  path: fieldPath,
+                  value
+                });
+              }
+            });
+          }, {}));
+      }
+    };
+
+    return entries;
+  }, {});
+>>>>>>> Stashed changes
 });
