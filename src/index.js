@@ -110,14 +110,12 @@ export const createHelpers = ({ getterType, mutationType }) => ({
     getterType,
     mutationType,
   )),
-<<<<<<< Updated upstream
-=======
-  mapDynamicFields: normalizeNamespace((namespace, fields, options) => mapFields(
+  mapDynamicFields: normalizeNamespace((namespace, fields, options) => mapDynamicFields(
     namespace,
     fields,
     options
   )),
-  mapDynamicMultiRowFields: normalizeNamespace((namespace, paths, options) => mapFields(
+  mapDynamicMultiRowFields: normalizeNamespace((namespace, paths, options) => mapDynamicMultiRowFields(
     namespace,
     paths,
     options
@@ -184,5 +182,4 @@ export const mapDynamicMultiRowFields = normalizeNamespace((namespace, paths, op
 
     return entries;
   }, {});
->>>>>>> Stashed changes
 });
