@@ -7,16 +7,27 @@ function objectEntries(obj) {
 function normalizeNamespace(fn) {
   return (...params) => {
     // eslint-disable-next-line prefer-const
-    let [namespace, map, getterType, mutationType] = typeof params[0] === `string`
-      ? [...params]
-      : [``, ...params];
+    let [namespace, map, options, mutationType] =
+      typeof params[0] === `string` ? [...params] : [``, ...params];
+    let signature = `legacy`;
+    let getterType;
 
     if (namespace.length && namespace.charAt(namespace.length - 1) !== `/`) {
       namespace += `/`;
     }
 
-    getterType = `${namespace}${getterType || `getField`}`;
-    mutationType = `${namespace}${mutationType || `updateField`}`;
+    if (typeof options === `object`) {
+      options.getterType = `${namespace}${options.getterType || `getField`}`;
+      options.mutationType = `${namespace}${options.mutationType || `updateField`}`;
+      signature = `options`;
+    } else {
+      getterType = options;
+      getterType = `${namespace}${getterType || `getField`}`;
+      mutationType = `${namespace}${mutationType || `updateField`}`;
+    }
+    if (signature === `options`) {
+      return fn(namespace, map, options);
+    }
 
     return fn(namespace, map, getterType, mutationType);
   };
@@ -95,34 +106,6 @@ export const mapMultiRowFields = normalizeNamespace((
   }, {});
 });
 
-export const createHelpers = ({ getterType, mutationType }) => ({
-  [getterType]: getField,
-  [mutationType]: updateField,
-  mapFields: normalizeNamespace((namespace, fields) => mapFields(
-    namespace,
-    fields,
-    getterType,
-    mutationType,
-  )),
-  mapMultiRowFields: normalizeNamespace((namespace, paths) => mapMultiRowFields(
-    namespace,
-    paths,
-    getterType,
-    mutationType,
-  )),
-  mapDynamicFields: normalizeNamespace((namespace, fields, options) => mapDynamicFields(
-    namespace,
-    fields,
-    options
-  )),
-  mapDynamicMultiRowFields: normalizeNamespace((namespace, paths, options) => mapDynamicMultiRowFields(
-    namespace,
-    paths,
-    options
-  )),
-});
-
-
 export const mapDynamicFields = normalizeNamespace((namespace, fields, options) => {
   const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
 
@@ -132,13 +115,13 @@ export const mapDynamicFields = normalizeNamespace((namespace, fields, options) 
         // 'this' refer to vue component
         const path = fieldsObject[key].replace(`PATH`, this[options.pathField]);
 
-        return this.$store.getters[`${namespace}getField`](path);
+        return this.$store.getters[`${options.getterType}`](path);
       },
       set(value) {
         // 'this' refer to vue component
         const path = fieldsObject[key].replace(`PATH`, this[options.pathField]);
 
-        this.$store.commit(`${namespace}updateField`, { path, value });
+        this.$store.commit(`${options.mutationType}`, { path, value });
       }
     };
 
@@ -160,17 +143,17 @@ export const mapDynamicMultiRowFields = normalizeNamespace((namespace, paths, op
           `PATH`,
           this[options.pathField]
         );
-        const rows = store.getters[`${namespace}getField`](path);
+        const rows = store.getters[`${options.getterType}`](path);
 
         return rows.map((fieldsObject, index) => Object.keys(fieldsObject).reduce((prev, fieldKey) => {
             const fieldPath = `${path}[${index}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
               get() {
-                return store.getters[`${namespace}getField`](fieldPath);
+                return store.getters[`${options.getterType}`](fieldPath);
               },
               set(value) {
-                store.commit(`${namespace}updateField`, {
+                store.commit(`${options.mutationType}`, {
                   path: fieldPath,
                   value
                 });
@@ -183,3 +166,29 @@ export const mapDynamicMultiRowFields = normalizeNamespace((namespace, paths, op
     return entries;
   }, {});
 });
+
+export const createHelpers = ({ getterType, mutationType, options }) => ({
+  mapFields: normalizeNamespace((namespace, fields) => mapFields(
+    namespace,
+    fields,
+    getterType,
+    mutationType,
+  )),
+  mapMultiRowFields: normalizeNamespace((namespace, paths) => mapMultiRowFields(
+    namespace,
+    paths,
+    getterType,
+    mutationType,
+  )),
+  mapDynamicFields: normalizeNamespace((namespace, fields) => mapDynamicFields(
+    namespace,
+    fields,
+    options
+  )),
+  mapDynamicMultiRowFields: normalizeNamespace((namespace, paths) => mapDynamicMultiRowFields(
+    namespace,
+    paths,
+    options
+  )),
+});
+
