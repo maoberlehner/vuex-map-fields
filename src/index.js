@@ -1,4 +1,4 @@
-import arrayToObject from "./lib/array-to-object";
+import arrayToObject from './lib/array-to-object';
 
 function objectEntries(obj) {
   return Object.keys(obj).map(key => [key, obj[key]]);
@@ -12,19 +12,19 @@ function normalizeNamespace(fn) {
     let signature = `legacy`;
     let getterType;
 
-    if (typeof getterType === `object`) {
-      getterType = options.getterType || null;
-      mutationType = options.mutationType || null;
-      signature = `options`;
-    } else {
-      getterType = options;
-    }
     if (namespace.length && namespace.charAt(namespace.length - 1) !== `/`) {
       namespace += `/`;
     }
-    getterType = `${namespace}${getterType || `getField`}`;
-    mutationType = `${namespace}${mutationType || `updateField`}`;
 
+    if (typeof options === `object`) {
+      options.getterType = `${namespace}${options.getterType || `getField`}`;
+      options.mutationType = `${namespace}${options.mutationType || `updateField`}`;
+      signature = `options`;
+    } else {
+      getterType = options;
+      getterType = `${namespace}${getterType || `getField`}`;
+      mutationType = `${namespace}${mutationType || `updateField`}`;
+    }
     if (signature === `options`) {
       return fn(namespace, map, options);
     }
@@ -49,27 +49,32 @@ export function updateField(state, { path, value }) {
 }
 
 export const mapFields = normalizeNamespace((namespace, fields, getterType, mutationType) => {
-    const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
+  const fieldsObject = Array.isArray(fields) ? arrayToObject(fields) : fields;
 
-    return Object.keys(fieldsObject).reduce((prev, key) => {
-      const path = fieldsObject[key];
-      const field = {
-        get() {
-          return this.$store.getters[getterType](path);
-        },
-        set(value) {
-          this.$store.commit(mutationType, { path, value });
-        },
-      };
+  return Object.keys(fieldsObject).reduce((prev, key) => {
+    const path = fieldsObject[key];
+    const field = {
+      get() {
+        return this.$store.getters[getterType](path);
+      },
+      set(value) {
+        this.$store.commit(mutationType, { path, value });
+      },
+    };
 
-      // eslint-disable-next-line no-param-reassign
-      prev[key] = field;
+    // eslint-disable-next-line no-param-reassign
+    prev[key] = field;
 
-      return prev;
-    }, {});
-  });
+    return prev;
+  }, {});
+});
 
-export const mapMultiRowFields = normalizeNamespace((namespace, paths, getterType, mutationType) => {
+export const mapMultiRowFields = normalizeNamespace((
+  namespace,
+  paths,
+  getterType,
+  mutationType,
+) => {
   const pathsObject = Array.isArray(paths) ? arrayToObject(paths) : paths;
 
   return Object.keys(pathsObject).reduce((entries, key) => {
@@ -81,7 +86,8 @@ export const mapMultiRowFields = normalizeNamespace((namespace, paths, getterTyp
         const store = this.$store;
         const rows = objectEntries(store.getters[getterType](path));
 
-        return rows.map(fieldsObject => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
+        return rows
+          .map(fieldsObject => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
             const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
@@ -100,9 +106,8 @@ export const mapMultiRowFields = normalizeNamespace((namespace, paths, getterTyp
   }, {});
 });
 
-export const createHelpers = ({ getterType, mutationType }) => ({
-  [getterType]: getField,
-  [mutationType]: updateField,
+
+export const createHelpers = ({ getterType, mutationType, options }) => ({
   mapFields: normalizeNamespace((namespace, fields) => mapFields(
     namespace,
     fields,
@@ -116,5 +121,4 @@ export const createHelpers = ({ getterType, mutationType }) => ({
     mutationType,
   ))
 });
-
 
