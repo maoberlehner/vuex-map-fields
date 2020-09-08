@@ -6,7 +6,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/maoberlehner/vuex-map-fields/badge.svg?branch=master)](https://coveralls.io/github/maoberlehner/vuex-map-fields?branch=master)
 [![GitHub stars](https://img.shields.io/github/stars/maoberlehner/vuex-map-fields.svg?style=social&label=Star)](https://github.com/maoberlehner/vuex-map-fields)
 
-Enable two-way data binding for form fields saved in a Vuex store.
+> Enable two-way data binding for form fields saved in a Vuex store.
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O7U55Y)
 
 ## Install
 
@@ -397,7 +399,7 @@ import { mapFields } from 'vuex-map-fields';
 export default {
   computed: {
     // `fooModule` is the name of the Vuex module.
-    ...mapFields(`fooModule`, ['foo']),
+    ...mapFields('fooModule', ['foo']),
   },
 };
 </script>
@@ -495,6 +497,12 @@ export default new Vuex.Store({
   },
 });
 ```
+
+## Patreon Sponsors
+
+[![Spiffy](https://res.cloudinary.com/maoberlehner/image/upload/c_scale,h_68,q_auto/v1549339992/github/vuex-map-fields/spiffy-logo.png)](https://spiffy.co/)
+
+[Become a sponsor](https://www.patreon.com/maoberlehner) and get your logo in this README with a link to your site.
 
 ## Articles
 

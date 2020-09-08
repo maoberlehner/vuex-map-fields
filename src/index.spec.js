@@ -5,7 +5,7 @@ import {
   mapMultiRowFields,
   mapObjectFields,
   updateField,
-} from './';
+} from '.';
 
 describe(`index`, () => {
   describe(`getField()`, () => {
