@@ -72,10 +72,12 @@ localVue.use(Vuex);
       expect(wrapper.exists()).toBe(true);
     });
 
-    test(`It should update field values when the store is updated.`, () => {
+    test(`It should update field values when the store is updated.`, async () => {
       store.state.foo = `foo`;
       store.state.bar.bar = `bar`;
       store.state.baz[0].foo.baz = `baz`;
+
+      await wrapper.vm.$nextTick();
 
       expect(wrapper.find(`#foo`).element.value).toBe(`foo`);
       expect(wrapper.find(`#bar`).element.value).toBe(`bar`);

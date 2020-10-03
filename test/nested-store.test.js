@@ -50,8 +50,10 @@ describe(`Component initialized with customized getter and mutation functions.`,
     expect(wrapper.exists()).toBe(true);
   });
 
-  test(`It should update field values when the store is updated.`, () => {
+  test(`It should update field values when the store is updated.`, async () => {
     store.state.form.foo.foo = `foo`;
+
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.element.value).toBe(`foo`);
   });

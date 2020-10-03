@@ -45,13 +45,15 @@ describe(`Component initialized with Vuex module.`, () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  test(`It should update field values when the store is updated.`, () => {
+  test(`It should update field values when the store is updated.`, async () => {
     store.state.fooModule.foo = `foo`;
+
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.element.value).toBe(`foo`);
   });
 
-  test(`It should update the store when the field values are updated.`, () => {
+  test(`It should update the store when the field values are updated.`, async () => {
     wrapper.element.value = `foo`;
     wrapper.trigger(`input`);
 
