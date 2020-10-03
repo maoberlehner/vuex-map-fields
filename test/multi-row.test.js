@@ -55,9 +55,11 @@ describe(`Component initialized with multi row setup.`, () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  test(`It should update field values when the store is updated.`, () => {
+  test(`It should update field values when the store is updated.`, async () => {
     store.state.users[0].name = `New Name`;
     store.state.users[1].email = `new@email.com`;
+
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.find(`input`).element.value).toBe(`New Name`);
     expect(wrapper.find(`div:nth-child(2) input:nth-child(2)`).element.value).toBe(`new@email.com`);
