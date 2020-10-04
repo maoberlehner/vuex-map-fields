@@ -3,6 +3,7 @@ import {
   getField,
   mapFields,
   mapMultiRowFields,
+  mapObjectFields,
   updateField,
 } from '.';
 
@@ -199,6 +200,128 @@ describe(`index`, () => {
     });
   });
 
+  describe(`mapObjectFields()`, () => {
+    test(`It should be possible to re-map the initial path.`, () => {
+      const expectedResult = {
+        otherFieldRows: { get: expect.any(Function) },
+      };
+
+      expect(mapObjectFields({ otherFieldRows: `*` })).toEqual(expectedResult);
+    });
+
+    test(`It should do nothing if path doesn't exist.`, () => {
+      const mockGetField = jest.fn().mockReturnValue(undefined);
+      const mappedObjectFields = mapObjectFields({ objProps: `obj.*` });
+
+      const getterSetters = mappedObjectFields.objProps.get.apply({
+        $store: { getters: { getField: mockGetField } },
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const x = getterSetters; // Trigger getter function.
+    });
+
+    test(`It should get the value of a top-level property via the \`getField()\` function.`, () => {
+      const mockObjectField = {
+        foo: `Foo`,
+        bar: `Bar`,
+      };
+      const mockGetField = jest.fn().mockReturnValue(mockObjectField);
+      mockGetField.mockReturnValueOnce(mockObjectField);
+
+      const mappedObjectFields = mapObjectFields({ objProps: `*` });
+
+      const getterSetters = mappedObjectFields.objProps.get.apply({
+        $store: { getters: { getField: mockGetField } },
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const x = getterSetters.foo; // Trigger getter function.
+      expect(mockGetField).lastCalledWith(`foo`);
+
+      // eslint-disable-next-line no-unused-vars
+      const y = getterSetters.bar; // Trigger getter function.
+      expect(mockGetField).lastCalledWith(`bar`);
+    });
+
+    test(`It should get the value of nested property via the \`getField()\` function.`, () => {
+      const mockObjectField = {
+        obj: {
+          foo: `Foo`,
+          bar: `Bar`,
+        },
+      };
+      const mockGetField = jest.fn().mockReturnValue(mockObjectField);
+      mockGetField.mockReturnValueOnce(mockObjectField.obj);
+
+      const mappedObjectFields = mapObjectFields({ objProps: `obj.*` });
+
+      const getterSetters = mappedObjectFields.objProps.get.apply({
+        $store: { getters: { getField: mockGetField } },
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const x = getterSetters.foo; // Trigger getter function.
+      expect(mockGetField).lastCalledWith(`obj.foo`);
+
+      // eslint-disable-next-line no-unused-vars
+      const y = getterSetters.bar; // Trigger getter function.
+      expect(mockGetField).lastCalledWith(`obj.bar`);
+    });
+
+    test(`It should commit new values to the store (top).`, () => {
+      const mockObjectField = {
+        foo: `Foo`,
+        bar: `Bar`,
+      };
+      const mockCommit = jest.fn();
+      const mockGetField = jest.fn().mockReturnValue(mockObjectField);
+      mockGetField.mockReturnValueOnce(mockObjectField);
+
+      const mappedObjectFields = mapObjectFields({ objProps: `*` });
+
+      const getterSetters = mappedObjectFields.objProps.get.apply({
+        $store: {
+          getters: { getField: mockGetField },
+          commit: mockCommit,
+        },
+      });
+
+      getterSetters.bar = `New Bar`; // Trigger setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `bar`, value: `New Bar` });
+
+      getterSetters.foo = `New Foo`; // Trigger setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `foo`, value: `New Foo` });
+    });
+
+    test(`It should commit new values to the store (nested).`, () => {
+      const mockObjectField = {
+        obj: {
+          foo: `Foo`,
+          bar: `Bar`,
+        },
+      };
+      const mockCommit = jest.fn();
+      const mockGetField = jest.fn().mockReturnValue(mockObjectField);
+      mockGetField.mockReturnValueOnce(mockObjectField.obj);
+
+      const mappedObjectFields = mapObjectFields({ objProps: `obj.*` });
+
+      const getterSetters = mappedObjectFields.objProps.get.apply({
+        $store: {
+          getters: { getField: mockGetField },
+          commit: mockCommit,
+        },
+      });
+
+      getterSetters.bar = `New Bar`; // Trigger setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `obj.bar`, value: `New Bar` });
+
+      getterSetters.foo = `New Foo`; // Trigger setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `obj.foo`, value: `New Foo` });
+    });
+  });
+
   describe(`createHelpers()`, () => {
     test(`It should be a function.`, () => {
       expect(typeof createHelpers).toBe(`function`);
@@ -211,6 +334,7 @@ describe(`index`, () => {
       expect(typeof helpers.updateFoo).toBe(`function`);
       expect(typeof helpers.mapFields).toBe(`function`);
       expect(typeof helpers.mapMultiRowFields).toBe(`function`);
+      expect(typeof helpers.mapObjectFields).toBe(`function`);
     });
 
     test(`It should call the \`mapFields()\` function with the provided getter and mutation types.`, () => {
@@ -234,6 +358,17 @@ describe(`index`, () => {
       };
 
       expect(helpers.mapMultiRowFields([`foo`])).toEqual(expectedResult);
+    });
+
+    test(`It should call the \`mapObjectFields()\` function with the provided getter and mutation types.`, () => {
+      const helpers = createHelpers({ getterType: `getFoo`, mutationType: `updateFoo` });
+      const expectedResult = {
+        foo: {
+          get: expect.any(Function),
+        },
+      };
+
+      expect(helpers.mapObjectFields({ foo: `foo` })).toEqual(expectedResult);
     });
   });
 });
