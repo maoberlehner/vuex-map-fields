@@ -80,6 +80,7 @@ export const mapMultiRowFields = normalizeNamespace((
             const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
+              enumerable: true,
               get() {
                 return store.getters[getterType](fieldPath);
               },
