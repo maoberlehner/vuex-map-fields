@@ -1,8 +1,5 @@
 import arrayToObject from './lib/array-to-object';
 
-function objectEntries(obj) {
-  return Object.keys(obj).map(key => [key, obj[key]]);
-}
 
 function normalizeNamespace(fn) {
   return (...params) => {
@@ -73,21 +70,28 @@ export const mapMultiRowFields = normalizeNamespace((
     entries[key] = {
       get() {
         const store = this.$store;
-        const rows = objectEntries(store.getters[getterType](path));
+        const rows = store.getters[getterType](path);
 
-        return rows
-          .map(fieldsObject => Object.keys(fieldsObject[1]).reduce((prev, fieldKey) => {
-            const fieldPath = `${path}[${fieldsObject[0]}].${fieldKey}`;
+        const defineProperties = function (fieldsObject, index, nestedPath) {
+          return Object.keys(fieldsObject).reduce((prev, fieldKey) => {
+            const fieldPath = index !== false ? `${nestedPath}[${index}].${fieldKey}` : `${nestedPath}.${fieldKey}`;
 
             return Object.defineProperty(prev, fieldKey, {
               get() {
+                if (typeof fieldsObject[fieldKey] === `object` && fieldsObject[fieldKey] !== null) {
+                  return defineProperties(fieldsObject[fieldKey], false, fieldPath);
+                }
                 return store.getters[getterType](fieldPath);
               },
               set(value) {
                 store.commit(mutationType, { path: fieldPath, value });
               },
             });
-          }, {}));
+          }, {});
+        };
+
+        return rows
+          .map((fieldsObject, index) => defineProperties(fieldsObject, index, path));
       },
     };
 

@@ -150,8 +150,9 @@ describe(`index`, () => {
           bar: `Bar`,
         },
         {
-          foo: `Foo`,
-          bar: `Bar`,
+          foo: {
+            bar: `Bar`,
+          },
         },
       ];
       const mockGetField = jest.fn().mockReturnValue(mockFieldRows);
@@ -166,8 +167,8 @@ describe(`index`, () => {
       expect(mockGetField).lastCalledWith(`fieldRows[0].bar`);
 
       // eslint-disable-next-line no-unused-vars
-      const y = getterSetters[1].foo; // Trigger getter function.
-      expect(mockGetField).lastCalledWith(`fieldRows[1].foo`);
+      const y = getterSetters[1].foo.bar; // Trigger nested getter function.
+      expect(mockGetField).lastCalledWith(`fieldRows[1].foo.bar`);
     });
 
     test(`It should commit new values to the store.`, () => {
@@ -177,8 +178,9 @@ describe(`index`, () => {
           bar: `Bar`,
         },
         {
-          foo: `Foo`,
-          bar: `Bar`,
+          foo: {
+            bar: `Bar`,
+          },
         },
       ];
       const mockCommit = jest.fn();
@@ -194,8 +196,8 @@ describe(`index`, () => {
       getterSetters[0].bar = `New Bar`; // Trigger setter function.
       expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[0].bar`, value: `New Bar` });
 
-      getterSetters[1].foo = `New Foo`; // Trigger setter function.
-      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[1].foo`, value: `New Foo` });
+      getterSetters[1].foo.bar = `New Bar`; // Trigger nested setter function.
+      expect(mockCommit).toBeCalledWith(`updateField`, { path: `fieldRows[1].foo.bar`, value: `New Bar` });
     });
   });
 
