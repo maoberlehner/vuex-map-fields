@@ -35,21 +35,21 @@ describe(`Component initialized with multi row setup.`, () => {
             name: `Foo`,
             email: `foo@foo.com`,
             address: {
-              city: 'Foo Bar'
+              city: `Foo Bar`,
             },
           },
           {
             name: `Bar`,
             email: `bar@bar.com`,
             address: {
-              city: 'Foo Bar'
+              city: `Foo Bar`,
             },
           },
           {
             name: `Foo`,
             email: `foo@foo.com`,
             address: {
-              city: 'Foo Bar'
+              city: `Foo Bar`,
             },
           },
         ],
@@ -73,7 +73,7 @@ describe(`Component initialized with multi row setup.`, () => {
     store.state.users[0].name = `New Name`;
     store.state.users[1].email = `new@email.com`;
     store.state.users[2].address.city = `New City Name`;
-    
+
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find(`input`).element.value).toBe(`New Name`);
