@@ -50,6 +50,7 @@
     "vuex": "^3.5.1"
   },
   "main": "dist/index.js",
+  "types": "types/vuex-map-fields/index.d.ts",
   "module": "dist/index.esm.js",
   "repository": {
     "type": "git",
