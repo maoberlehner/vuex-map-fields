@@ -11,5 +11,6 @@
   "extends": "@avalanche/eslint-config",
   "rules": {
     "compat/compat": "error"
-  }
+  },
+  "ignorePatterns": ["**/*.d.ts"]
 }
