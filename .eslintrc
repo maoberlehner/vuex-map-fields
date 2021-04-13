@@ -12,5 +12,5 @@
   "rules": {
     "compat/compat": "error"
   },
-  "ignorePatterns": ["**/*.d.ts"],
+  "ignorePatterns": ["**/*.d.ts"]
 }
