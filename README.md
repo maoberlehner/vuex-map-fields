@@ -516,7 +516,7 @@ export default new Vuex.Store({
 
 Markus Oberlehner  
 Website: https://markus.oberlehner.net  
-Twitter: https://twitter.com/MaOberlehner  
+𝕏 (Twitter): https://twitter.com/MaOberlehner  
 PayPal.me: https://paypal.me/maoberlehner  
 Patreon: https://www.patreon.com/maoberlehner
 
